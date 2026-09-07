@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DS100 — The Hidden Cost</title>
+<style>
+:root{--bg:#04070d;--red:#ff4b55;--muted:#94a3b8;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0}html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+.slide{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center;background:radial-gradient(circle at 50% 15%,#101827 0,#04070d 56%,#020308 100%);overflow:hidden}
+.slide:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(circle,#000 20%,transparent 78%)}
+.head{position:absolute;z-index:5;top:58px;left:90px;right:90px;text-align:center;opacity:0;animation:enter .8s var(--ease) .12s forwards}
+.eyebrow{font-size:15px;font-weight:800;letter-spacing:.34em;text-transform:uppercase;color:var(--red);margin-bottom:17px}.title{font-size:67px;line-height:1.12;letter-spacing:-.035em;font-weight:850}.title span{color:#8491a6}
+.grid{position:absolute;z-index:4;left:92px;right:92px;top:292px;bottom:72px;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;gap:22px}
+.risk{position:relative;border:1px solid rgba(255,255,255,.09);border-radius:22px;overflow:hidden;background:#09101c;box-shadow:0 18px 42px rgba(0,0,0,.35);opacity:0;transform:translateY(28px);animation:card .78s var(--ease) forwards}.risk:nth-child(1){animation-delay:.25s}.risk:nth-child(2){animation-delay:.34s}.risk:nth-child(3){animation-delay:.43s}.risk:nth-child(4){animation-delay:.52s}
+.media{position:absolute;inset:0}.media img,.media video{width:100%;height:100%;object-fit:cover;filter:saturate(.8) contrast(1.08);opacity:.54}.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(4,7,13,.97) 0%,rgba(4,7,13,.83) 47%,rgba(4,7,13,.2) 100%),linear-gradient(0deg,rgba(4,7,13,.94),transparent 70%)}
+.copy{position:absolute;z-index:3;left:38px;right:34px;bottom:32px}.index{font-size:13px;letter-spacing:.22em;font-weight:800;color:var(--red);margin-bottom:10px}.risk h2{font-size:30px;line-height:1.08;letter-spacing:-.02em;margin-bottom:10px;max-width:660px}.risk p{font-size:16.5px;line-height:1.45;color:#a7b2c4;max-width:650px}.tags{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.tag{font-size:12px;color:#ff7a82;background:rgba(255,75,85,.12);padding:6px 10px;border-radius:5px}
+.brand{position:absolute;right:32px;bottom:22px;z-index:8;height:23px;opacity:.5}
+@keyframes enter{to{opacity:1;transform:none}}@keyframes card{to{opacity:1;transform:none}}
+</style>
+<link rel="stylesheet" href="shared-typography.css?v=20260814-r4">
+</head>
+<body class="ds-group-a ds-slide-04">
+<main class="slide" id="slide-container">
+  <header class="head"><div class="eyebrow">The Hidden Cost</div><h1 class="title">The camera that saved you money<br><span>is your most expensive liability.</span></h1></header>
+  <section class="grid">
+    <article class="risk"><div class="media"><img src="../assets/Images__quality_collapse_still.png" alt="Road camera view approaching a bright tunnel exit"></div><div class="shade"></div><div class="copy"><div class="index">01 · EVIDENCE</div><h2>Spec-Perfect. Road-Blind.</h2></div></article>
+    <article class="risk"><div class="media"><img src="../assets/Images__ai_blind_bg.jpg" alt="AI false alarm scenario"></div><div class="shade"></div><div class="copy"><div class="index">02 · INTELLIGENCE</div><h2>Edge AI, Frozen at Birth.</h2></div></article>
+    <article class="risk"><div class="media"><img src="../assets/Images__power_cut_bg.jpg" alt="Power interruption"></div><div class="shade"></div><div class="copy"><div class="index">03 · RELIABILITY</div><h2>Dropping the Ball When Needed Most.</h2></div></article>
+    <article class="risk"><div class="media"><img src="../assets/Images__dead_end_bg.jpg" alt="Fleet vehicle"></div><div class="shade"></div><div class="copy"><div class="index">04 · FLEET READINESS</div><h2>Built for Cars, Not Fleets.</h2></div></article>
+  </section>
+  <img class="brand" src="../assets/Branding__streamax.png" alt="Streamax">
+</main>
+<script>function fit(){const e=document.getElementById('slide-container'),s=Math.min(innerWidth/1920,innerHeight/1080);e.style.transform=`translate(-50%,-50%) scale(${s})`}addEventListener('resize',fit);fit();</script>
+<script src="shared-compliance-footer.js"></script></body></html>

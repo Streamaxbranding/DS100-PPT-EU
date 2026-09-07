@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DS100 — Coverage to Precision</title>
+<style>
+:root{--bg:#050810;--green:#2af598;--cyan:#20d9c7;--blue:#009efd;--white:#fff;--muted:#a9b4c6;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;color:var(--white);font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.slide{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center;overflow:hidden;background:radial-gradient(circle at 18% 42%,rgba(42,245,152,.09),transparent 32%),radial-gradient(circle at 82% 42%,rgba(0,158,253,.11),transparent 34%),var(--bg)}
+.grid{position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,#000,transparent 90%);pointer-events:none}
+.header{position:absolute;left:120px;right:120px;top:64px;text-align:center;z-index:4}
+.eyebrow{font-size:16px;font-weight:800;letter-spacing:.32em;text-transform:uppercase;color:var(--green);margin-bottom:18px}
+h1{font-size:82px;line-height:1.02;letter-spacing:-.055em;font-weight:900}
+h1 span{background:linear-gradient(100deg,var(--green),var(--cyan) 48%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.sub{margin-top:18px;font-size:24px;line-height:1.45;color:var(--muted)}
+.stage{position:absolute;left:120px;right:120px;top:338px;height:558px;overflow:hidden;border-radius:30px;background:#07101a;border:1px solid rgba(255,255,255,.13);box-shadow:0 42px 130px rgba(0,0,0,.52),0 0 68px rgba(0,158,253,.07)}
+.stage video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:saturate(.9) contrast(1.08) brightness(.72);transform:scale(1.02)}
+.stage:after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(5,8,16,.32),transparent 34%,transparent 68%,rgba(5,8,16,.66));pointer-events:none}
+.shade{position:absolute;top:0;bottom:0;width:0;background:rgba(3,7,14,.77);backdrop-filter:blur(7px);z-index:2;animation:shadeShift 7.2s ease-in-out infinite}
+.shade.left{left:0;border-right:1px solid rgba(42,245,152,.35)}.shade.right{right:0;border-left:1px solid rgba(0,158,253,.35)}
+.focus-frame{position:absolute;left:50%;top:28px;bottom:28px;width:calc(100% - 56px);transform:translateX(-50%);border:2px solid rgba(42,245,152,.55);border-radius:22px;z-index:3;box-shadow:inset 0 0 60px rgba(42,245,152,.04),0 0 28px rgba(42,245,152,.12);animation:frameShift 7.2s ease-in-out infinite;pointer-events:none}
+.mode{position:absolute;top:30px;z-index:4;display:flex;align-items:center;gap:14px;padding:11px 17px;border-radius:999px;background:rgba(4,8,15,.72);border:1px solid rgba(255,255,255,.12);backdrop-filter:blur(14px);font-size:15px;font-weight:850;letter-spacing:.16em;text-transform:uppercase}
+.mode:before{content:"";width:8px;height:8px;border-radius:50%;box-shadow:0 0 16px currentColor}.coverage{left:30px;color:var(--blue);animation:coverageMode 7.2s ease-in-out infinite}.precision{right:30px;color:var(--green);animation:precisionMode 7.2s ease-in-out infinite}
+.metric{position:absolute;bottom:34px;z-index:4;display:flex;align-items:flex-end;gap:22px;color:#fff}
+.metric.coverage-metric{left:40px;animation:coverageMode 7.2s ease-in-out infinite}.metric.precision-metric{right:40px;text-align:right;animation:precisionMode 7.2s ease-in-out infinite}
+.metric strong{font-size:64px;line-height:.86;letter-spacing:-.06em}.metric span{font-size:18px;line-height:1.2;color:var(--muted);font-weight:700;letter-spacing:.04em}.metric.precision-metric strong{background:linear-gradient(100deg,var(--green),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.footer{position:absolute;left:120px;right:120px;bottom:64px;display:flex;align-items:center;justify-content:center;gap:28px;font-size:34px;font-weight:850;letter-spacing:-.025em}
+.footer .wide{color:var(--blue)}.footer .arrow{width:220px;height:2px;background:linear-gradient(90deg,var(--blue),var(--green));position:relative}.footer .arrow:after{content:"";position:absolute;right:-1px;top:50%;width:12px;height:12px;border-top:2px solid var(--green);border-right:2px solid var(--green);transform:translateY(-50%) rotate(45deg)}.footer .focused{color:var(--green)}
+.brand{position:absolute;right:28px;bottom:22px;height:24px;opacity:.95;padding:6px 14px;box-sizing:content-box;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08);border-radius:999px;z-index:8}
+@keyframes shadeShift{0%,24%,100%{width:0}48%,76%{width:300px}}
+@keyframes frameShift{0%,24%,100%{width:calc(100% - 56px);border-color:rgba(0,158,253,.52);box-shadow:inset 0 0 60px rgba(0,158,253,.04),0 0 28px rgba(0,158,253,.12)}48%,76%{width:1040px;border-color:rgba(42,245,152,.62);box-shadow:inset 0 0 60px rgba(42,245,152,.05),0 0 30px rgba(42,245,152,.16)}}
+@keyframes coverageMode{0%,28%,100%{opacity:1;transform:translateY(0)}43%,82%{opacity:.16;transform:translateY(5px)}}
+@keyframes precisionMode{0%,30%,94%,100%{opacity:.15;transform:translateY(5px)}48%,82%{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.shade,.focus-frame,.coverage,.precision,.coverage-metric,.precision-metric{animation:none}.shade{width:300px}.focus-frame{width:1040px}.coverage,.coverage-metric{opacity:.18}.precision,.precision-metric{opacity:1}}
+</style>
+</head>
+<body><main class="slide" id="slide-container">
+  <div class="grid"></div>
+  <header class="header">
+    <div class="eyebrow">Coverage → Precision</div>
+    <h1>Same road. <span>A different priority.</span></h1>
+    <p class="sub">Open the frame for context. Concentrate the view for earlier recognition.</p>
+  </header>
+  <section class="stage" aria-label="Coverage to Precision video comparison">
+    <video id="transition-video" src="../assets/Videos__Coverage-Precision-Transition-Placeholder.mp4" autoplay muted loop playsinline preload="auto"></video>
+    <div class="shade left"></div><div class="shade right"></div><div class="focus-frame"></div>
+    <div class="mode coverage">Coverage · Wide Context</div><div class="mode precision">Precision · Focused Foresight</div>
+    <div class="metric coverage-metric"><strong>147°</strong><span>2.58mm<br>wide road context</span></div>
+    <div class="metric precision-metric"><span>3.85mm<br>focused road detail</span><strong>103°</strong></div>
+  </section>
+  <div class="footer"><span class="wide">See more around you.</span><i class="arrow"></i><span class="focused">See risk sooner.</span></div>
+  <img class="brand" src="../assets/Branding__streamax.png" alt="Streamax">
+</main>
+<script>
+const slide=document.getElementById('slide-container');const video=document.getElementById('transition-video');
+function fit(){const scale=Math.min(innerWidth/1920,innerHeight/1080);slide.style.transform=`translate(-50%,-50%) scale(${scale})`}
+function setMedia(active){if(active)video.play().catch(()=>{});else video.pause()}
+addEventListener('resize',fit);fit();addEventListener('message',event=>{const data=event&&event.data;if(data&&data.source==='meetdeck-player'&&data.type==='media-active')setMedia(!!data.active)});
+function nav(dir){try{if(parent&&parent!==window&&typeof parent[dir]==='function'){parent[dir]();return true}}catch(_){ }return false}
+addEventListener('keydown',event=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(event.key)){event.preventDefault();nav('next')}else if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();nav('prev')}});addEventListener('click',event=>{event.preventDefault();nav(event.clientX<innerWidth*.3?'prev':'next')});
+</script><script src="shared-compliance-footer.js"></script></body></html>

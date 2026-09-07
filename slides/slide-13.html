@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DS100 — EzInstaller</title>
+<style>
+:root{--bg:#050810;--green:#2af598;--blue:#009efd;--ink:#fff;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--ink)}
+.slide{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center;overflow:hidden;background:radial-gradient(circle at 24% 46%,rgba(42,245,152,.075),transparent 34%),radial-gradient(circle at 78% 22%,rgba(0,158,253,.075),transparent 32%),var(--bg)}
+.slide:before{content:"";position:absolute;inset:0;background:linear-gradient(rgba(255,255,255,.014) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.014) 1px,transparent 1px);background-size:64px 64px;mask-image:linear-gradient(to bottom,#000,transparent 92%);pointer-events:none}
+.phone-zone{position:absolute;left:116px;top:66px;width:478px;height:948px;display:grid;place-items:center;opacity:0;transform:translateX(-24px);animation:phoneIn .9s var(--ease) .05s forwards}
+.phone-glow{position:absolute;width:550px;height:900px;border-radius:50%;background:radial-gradient(ellipse,rgba(42,245,152,.13),rgba(0,158,253,.045) 44%,transparent 72%);filter:blur(44px)}
+.phone{position:relative;width:424px;height:884px;border-radius:65px;padding:10px;background:linear-gradient(145deg,#343a45 0%,#11151c 10%,#030406 36%,#000 78%,#1b2028 100%);border:1px solid rgba(255,255,255,.2);box-shadow:inset 0 0 0 1px rgba(255,255,255,.06),0 44px 110px rgba(0,0,0,.74),0 0 66px rgba(42,245,152,.08)}
+.phone:before{content:"";position:absolute;left:50%;top:15px;width:116px;height:27px;transform:translateX(-50%);border-radius:18px;background:#020305;z-index:4}
+.phone-screen{position:relative;width:100%;height:100%;overflow:hidden;border-radius:55px;background:#000;border:1px solid rgba(255,255,255,.06)}
+.phone-screen video{width:100%;height:100%;object-fit:cover;display:block}
+.right-zone{position:absolute;left:682px;right:92px;top:78px;bottom:112px;display:flex;flex-direction:column;align-items:stretch}
+.video-pair{height:430px;display:flex;align-items:center;justify-content:center}
+.install-shot{position:relative;width:1030px;height:100%;overflow:hidden;border-radius:38px;background:radial-gradient(ellipse at 50% 50%,rgba(0,158,253,.08),transparent 70%);border:0;box-shadow:none;opacity:0;transform:translateY(18px);animation:shotIn .82s var(--ease) forwards}
+.install-shot{height:100%;animation-delay:.18s}
+.install-shot:before{content:"";position:absolute;inset:0;border-radius:inherit;background:linear-gradient(90deg,rgba(5,8,16,.78),transparent 16%,transparent 84%,rgba(5,8,16,.78)),linear-gradient(0deg,rgba(5,8,16,.72),transparent 28%,rgba(5,8,16,.42));z-index:2;pointer-events:none}
+.install-shot video{width:100%;height:100%;object-fit:cover;display:block;filter:saturate(.92) contrast(1.03);-webkit-mask-image:radial-gradient(ellipse 93% 94% at 50% 50%,#000 57%,transparent 100%);mask-image:radial-gradient(ellipse 93% 94% at 50% 50%,#000 57%,transparent 100%)}
+.title{width:100%;margin-top:52px;text-align:center;font-size:98px;line-height:.92;font-weight:900;letter-spacing:-.065em;background:linear-gradient(105deg,var(--green),#20d9c7 48%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent;opacity:0;filter:blur(10px);transform:translateY(14px);animation:titleIn .86s var(--ease) .56s forwards}
+.quote{margin-top:46px;margin-bottom:0;max-width:1120px;font-size:64px;line-height:1.04;font-weight:820;letter-spacing:-.045em;color:#fff;opacity:0;transform:translateY(20px);animation:quoteIn .9s var(--ease) .58s forwards}
+.quote > div:first-child{font-size:78px;text-align:center;}
+.quote span{background:linear-gradient(100deg,var(--green),var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.quote-sub{margin-top:22px;max-width:1040px;font-size:26px;line-height:1.48;font-weight:500;letter-spacing:-.012em;color:rgba(215,226,238,.78);opacity:0;transform:translateY(16px);animation:quoteIn .78s var(--ease) .78s forwards}
+.brand{position:absolute;right:28px;bottom:22px;height:24px;opacity:.95;padding:6px 14px;box-sizing:content-box;background:rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.08);border-radius:999px}
+@keyframes phoneIn{to{opacity:1;transform:none}}@keyframes shotIn{to{opacity:1;transform:none}}@keyframes titleIn{to{opacity:1;filter:blur(0);transform:none}}@keyframes quoteIn{to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-delay:0s!important}}
+</style>
+<link rel="stylesheet" href="shared-typography.css?v=20260814-r3">
+</head>
+<body class="ds-group-b"><main class="slide" id="slide-container">
+  <section class="phone-zone">
+    <div class="phone-glow"></div>
+    <div class="phone"><div class="phone-screen"><video id="app-video" src="../assets/Videos__LocalInstallMode.mp4" autoplay muted loop playsinline preload="auto"></video></div></div>
+  </section>
+  <section class="right-zone">
+    <div class="video-pair">
+      <div class="install-shot"><video class="install-video" src="../assets/DS100_EZInstaller.mp4" autoplay muted loop playsinline preload="auto"></video></div>
+    </div>
+    <div class="quote"><div>EzInstaller</div><span>A guided workflow from mounting to a verified setup.</span></div>
+    <p class="quote-sub">1. CONNECT <br> 2. POSITION & CALIBRATE <br> 3. VERIFY</p>
+  </section>
+  <img class="brand" src="../assets/Branding__streamax.png" alt="Streamax">
+</main>
+<script>
+const slide=document.getElementById('slide-container');
+const media=[...document.querySelectorAll('video')];
+function fit(){const scale=Math.min(innerWidth/1920,innerHeight/1080);slide.style.transform=`translate(-50%,-50%) scale(${scale})`}
+function setMedia(active){media.forEach(video=>{if(active)video.play().catch(()=>{});else video.pause()})}
+addEventListener('resize',fit);fit();
+addEventListener('message',event=>{const data=event&&event.data;if(data&&data.source==='meetdeck-player'&&data.type==='media-active')setMedia(!!data.active)});
+function navigate(direction){try{if(parent&&parent!==window&&typeof parent[direction]==='function'){parent[direction]();return true}}catch(_){ }return false}
+addEventListener('keydown',event=>{if(['ArrowRight','ArrowDown',' ','PageDown'].includes(event.key)){event.preventDefault();navigate('next')}else if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){event.preventDefault();navigate('prev')}});
+addEventListener('click',event=>{event.preventDefault();navigate(event.clientX<innerWidth*.3?'prev':'next')});
+</script><script src="shared-compliance-footer.js"></script></body></html>

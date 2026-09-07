@@ -1,0 +1,867 @@
+<!doctype html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DS100</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html,body{width:100vw;height:100vh;background:#050810;overflow:hidden;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;color:#e5e7eb;}
+
+/* ─── PICKER ─────────────────────────────────────────────── */
+#picker{width:100vw;height:100vh;overflow:auto;padding:32px 48px 64px;display:flex;flex-direction:column;gap:24px;}
+#picker.hidden{display:none;}
+#picker-header{display:flex;align-items:flex-end;justify-content:space-between;gap:24px;flex-wrap:wrap;position:sticky;top:-32px;background:linear-gradient(#050810 70%,transparent);padding:24px 0 16px;margin:-24px 0 0;z-index:10;}
+#deck-title{font-size:1.6rem;font-weight:700;letter-spacing:-0.01em;color:#fff;line-height:1.2;}
+#deck-meta{font-size:0.8rem;color:#9ca3af;margin-top:6px;letter-spacing:0.03em;}
+#deck-meta .ratio{padding:2px 8px;background:rgba(42,245,152,0.15);color:#2af598;border-radius:9999px;font-family:'JetBrains Mono',monospace;font-size:0.7rem;margin-left:8px;}
+#picker-toolbar{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.btn{padding:8px 14px;border-radius:8px;font-size:0.8rem;font-weight:500;cursor:pointer;border:1px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);color:#e5e7eb;transition:all 0.15s;font-family:inherit;}
+.btn:hover{background:rgba(255,255,255,0.08);border-color:rgba(255,255,255,0.2);}
+.btn-primary{background:linear-gradient(135deg,#2af598 0%,#009efd 100%);color:#000;border:0;font-weight:700;padding:10px 22px;}
+.btn-primary:hover{filter:brightness(1.1);}
+.btn-primary:disabled{opacity:0.35;cursor:not-allowed;filter:none;}
+
+#grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;position:relative;}
+.card{position:relative;cursor:pointer;user-select:none;border:2px solid rgba(255,255,255,0.08);border-radius:12px;overflow:hidden;background:rgba(11,18,33,0.4);transition:all 0.15s;}
+.card:hover{border-color:rgba(42,245,152,0.4);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,0.3);}
+.card.selected{border-color:#2af598;box-shadow:0 0 16px rgba(42,245,152,0.18);}
+.card.deselected{opacity:0.4;}
+.card.deselected:hover{opacity:0.75;}
+/* drag-and-drop 排序 — handle 出现在卡片右上角, 必须从 handle 拖才生效, 整张卡 onclick 切选中不冲突 */
+.drag-handle{position:absolute;top:8px;right:8px;width:24px;height:24px;border-radius:6px;background:rgba(0,0,0,0.6);border:1px solid rgba(255,255,255,0.12);color:rgba(255,255,255,0.55);display:flex;align-items:center;justify-content:center;cursor:grab;z-index:6;transition:background 0.15s,border-color 0.15s,color 0.15s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.drag-handle:hover{background:rgba(42,245,152,0.18);border-color:rgba(42,245,152,0.5);color:#2af598;}
+.drag-handle:active{cursor:grabbing;}
+/* 被拖卡 — 完全隐藏 (dragImage 已经在鼠标处跟随), 原位置空出让让位的卡能填补
+   注意: opacity:0 是在 setTimeout 0ms 后才加, 不影响 dragstart 时 setDragImage 抓的实色快照 */
+.card.dragging{opacity:0;pointer-events:none;}
+/* 实时让位过渡 — 所有 .card 的 transform 都过渡, hover 的 translateY 也走这条 */
+.card{transition:transform 0.22s cubic-bezier(0.2,0.8,0.2,1),border-color 0.15s,opacity 0.15s,box-shadow 0.15s;}
+.check{position:absolute;top:8px;left:8px;width:22px;height:22px;border-radius:6px;background:rgba(0,0,0,0.65);border:2px solid rgba(255,255,255,0.3);z-index:5;display:flex;align-items:center;justify-content:center;transition:all 0.15s;backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);}
+.card.selected .check{background:#2af598;border-color:#2af598;}
+.card.selected .check::after{content:'';width:10px;height:6px;border:2px solid #000;border-top:0;border-right:0;transform:rotate(-45deg) translate(1px,-2px);}
+.thumb-wrap{position:relative;aspect-ratio:1920 / 1080;background:#050810;overflow:hidden;pointer-events:none;}
+.thumb{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}
+.meta{padding:12px 14px;}
+.meta-top{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.num{font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:#6b7280;letter-spacing:0.05em;}
+.type{font-size:0.6rem;color:#9ca3af;padding:2px 8px;background:rgba(255,255,255,0.05);border-radius:9999px;text-transform:uppercase;letter-spacing:0.08em;font-weight:600;}
+.title{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:0.88rem;color:#e5e7eb;margin-top:6px;line-height:1.4;word-break:break-word;}
+#picker-hint{font-size:0.7rem;color:#6b7280;text-align:center;}
+
+/* ─── PLAYER ─────────────────────────────────────────────── */
+#player{width:100vw;height:100vh;background:#000;position:relative;}
+#player.hidden{display:none;}
+#viewport{position:absolute;top:50%;left:50%;width:1920px;height:1080px;transform-origin:center center;transform:translate(-50%,-50%);background:#000;overflow:hidden;box-shadow:0 0 120px rgba(0,0,0,0.85);}
+#stage{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050810;opacity:1;transform:translateY(0);filter:blur(0);transition:opacity .34s cubic-bezier(.2,.8,.2,1),transform .34s cubic-bezier(.2,.8,.2,1),filter .34s ease;}
+#stage.is-switching{opacity:0;transform:translateY(7px);filter:blur(5px);}
+/* 浮动 UI: 默认隐藏, 鼠标活动唤醒 (含 slide iframe 内的活动 — 经 hardener 中继 message 触发) */
+#nav-bar,#exit-btn,#hint{opacity:0;transition:opacity 0.35s ease;pointer-events:none;}
+#player.show-controls #nav-bar,#player.show-controls #exit-btn,#player.show-controls #hint{opacity:1;pointer-events:auto;}
+#hint{pointer-events:none!important;}
+#nav-bar{position:fixed;bottom:1.4rem;left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:0.6rem;padding:0.5rem 1.2rem;background:rgba(10,10,20,0.82);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border:1px solid rgba(255,255,255,0.14);border-radius:9999px;color:#fff;font-size:0.85rem;z-index:9999;user-select:none;}
+#nav-bar button{background:none;border:none;color:rgba(255,255,255,0.82);font-size:1rem;cursor:pointer;width:2rem;height:2rem;display:flex;align-items:center;justify-content:center;border-radius:50%;transition:background 0.2s;font-family:inherit;}
+#nav-bar button:hover{background:rgba(255,255,255,0.15);}
+#control-wake-zone{position:fixed;left:0;right:0;bottom:0;height:52px;z-index:9997;background:transparent;touch-action:manipulation;}
+#player.hidden #control-wake-zone{display:none;}
+#nav-counter{min-width:3.5rem;text-align:center;font-weight:500;letter-spacing:0.05em;opacity:0.92;font-variant-numeric:tabular-nums;}
+#exit-btn{position:fixed;top:1rem;right:1rem;padding:6px 12px;background:rgba(0,0,0,0.5);color:rgba(255,255,255,0.7);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.75rem;cursor:pointer;z-index:9999;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);font-family:inherit;}
+#exit-btn:hover{background:rgba(0,0,0,0.7);color:#fff;}
+#hint{position:fixed;bottom:1.4rem;right:1.4rem;font-size:0.7rem;color:rgba(255,255,255,0.35);letter-spacing:0.05em;z-index:9998;}
+/* picker 卡片下方的演讲稿编辑区 — toggle 展开 textarea, 改完写回 window.__SPEECHES__ */
+.card .speech-edit-toggle{display:flex;align-items:center;justify-content:space-between;gap:8px;width:100%;padding:8px 14px;background:rgba(255,255,255,0.02);border:0;border-top:1px solid rgba(255,255,255,0.06);color:#9ca3af;font-size:0.75rem;cursor:pointer;font-family:inherit;transition:background 0.15s;}
+.card .speech-edit-toggle:hover{background:rgba(255,255,255,0.06);color:#e5e7eb;}
+.card.has-speech .speech-edit-toggle{color:#2af598;}
+.card .speech-edit-toggle .toggle-arrow{transition:transform 0.2s;opacity:0.6;flex-shrink:0;}
+.card.speech-open .speech-edit-toggle .toggle-arrow{transform:rotate(180deg);}
+.card .speech-edit-body{display:none;padding:10px 14px 14px;background:rgba(0,0,0,0.25);border-top:1px solid rgba(255,255,255,0.04);}
+.card.speech-open .speech-edit-body{display:block;}
+.card .speech-edit-body textarea{width:100%;min-height:90px;max-height:200px;resize:vertical;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:6px;padding:8px 10px;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;font-size:0.82rem;line-height:1.6;outline:none;box-sizing:border-box;}
+.card .speech-edit-body textarea:focus{border-color:rgba(42,245,152,0.4);background:rgba(255,255,255,0.06);}
+.card .speech-edit-body .len-hint{margin-top:4px;text-align:right;font-size:0.65rem;color:#6b7280;font-variant-numeric:tabular-nums;}
+.card .has-dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:#2af598;margin-left:4px;vertical-align:middle;}
+/* picker 模式切换 — 普通 / 演讲者 pills */
+#mode-toggle{display:flex;align-items:center;gap:0;padding:3px;border-radius:9999px;background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.1);}
+#mode-toggle button{padding:5px 14px;border-radius:9999px;font-size:0.75rem;font-weight:500;cursor:pointer;transition:all 0.15s;border:0;background:transparent;color:rgba(255,255,255,0.55);font-family:inherit;}
+#mode-toggle button.active{background:linear-gradient(135deg,#2af598 0%,#009efd 100%);color:#000;font-weight:700;}
+#mode-toggle button:hover:not(.active){color:#fff;}
+</style>
+</head>
+<body>
+
+<!-- PICKER -->
+<div id="picker">
+  <header id="picker-header">
+    <div>
+      <h1 id="deck-title">DS100</h1>
+      <div id="deck-meta">
+        共 <span id="total-count">28</span> 页 · 已选 <span id="selected-count">28</span>
+        <span class="ratio">1920×1080</span>
+      </div>
+    </div>
+    <div id="picker-toolbar">
+      <button class="btn" onclick="selectAll()">全选</button>
+      <button class="btn" onclick="selectNone()">全不选</button>
+      <button class="btn" onclick="invertSelection()">反选</button>
+      <button class="btn" title="加入本地的自包含 slide.html — 作为可勾选/可拖拽排序的卡片, 拖到哪播到哪" onclick="document.getElementById('add-slide-input').click()">+ 添加 slide</button>
+      <input id="add-slide-input" type="file" accept=".html,.htm,text/html" multiple style="display:none" onchange="addLocalSlides(this.files); this.value='';">
+      <div id="mode-toggle" title="选择播放模式 — 演讲者模式会在播放开始时自动弹出副窗显示演讲稿">
+        <button data-mode="normal" class="active" onclick="setMode('normal')">普通</button>
+        <button data-mode="speaker" onclick="setMode('speaker')">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:-2px;margin-right:5px"><path d="M2 3h20"/><path d="M21 3v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V3"/><path d="m7 21 5-5 5 5"/></svg>演讲者
+        </button>
+      </div>
+      <button class="btn btn-primary" id="play-btn" onclick="startPlay()">▶ 开始播放</button>
+    </div>
+  </header>
+  <div id="grid"></div>
+  <div id="picker-hint">点击卡片切换是否播放 · 右上角 ⋮⋮ 拖动调整顺序 · Enter 直接开始 · 默认全选 · 演讲者模式会在开始播放时自动弹出副窗</div>
+</div>
+
+<!-- PLAYER — 播放界面零按钮 (除了 nav-bar 的翻页), 不打扰演讲 -->
+<div id="player" class="hidden">
+  <div id="viewport"><iframe id="stage" src="" loading="eager"></iframe></div>
+  <div id="control-wake-zone" aria-hidden="true"></div>
+  <button id="exit-btn" onclick="backToPicker()" title="返回选择 (Esc)">✕ 返回选择</button>
+  <div id="nav-bar">
+    <button onclick="prev()" title="上一页 (←)">&#9664;</button>
+    <span id="nav-counter">1 / 1</span>
+    <button onclick="next()" title="下一页 (→ / Space)">&#9654;</button>
+  </div>
+  <div id="hint">← → 翻页 · Space 下一页 · Esc 返回</div>
+</div>
+
+<script>
+const SLIDES = [{"file":"slides/slide-launch.html","title":"DS100 Launch","type":"title"},{"file":"slides/slide-00.html","title":"Agenda","type":"agenda"},{"file":"slides/slide-01.html","title":"One bad day can end the business.","type":"content"},{"file":"slides/slide-02.html","title":"An AI dashcam is the smartest dollar.","type":"content"},{"file":"slides/slide-03.html","title":"Too much to carry, or too little to trust.","type":"content"},{"file":"slides/slide-04.html","title":"The Hidden Cost","type":"grid"},{"file":"slides/slide-05.html","title":"Three Questions Before the Baseline","type":"transition"},{"file":"slides/slide-06.html","title":"Meet DS100","type":"transition"},{"file":"slides/slide-07.html","title":"DS100 — Product Film","type":"video"},{"file":"slides/slide-08.html","title":"Fleet Safety Accessible to All","type":"highlight"},{"file":"slides/slide-09.html","title":"Designed for dependable daily operation.","type":"content"},{"file":"slides/slide-10.html","title":"See the whole cabin. In any light.","type":"content"},{"file":"slides/slide-11.html","title":"What's ahead. Wide enough to miss nothing.","type":"content"},{"file":"slides/slide-12.html","title":"GPS Dead Zone?","type":"transition"},{"file":"slides/slide-13.html","title":"EzInstaller","type":"video"},{"file":"slides/slide-14.html","title":"Every Face Pixelated. Every Frame Compliant.","type":"content"},{"file":"slides/slide-15.html","title":"A Compliance Recorder That Protects the Driver, Too.","type":"content"},{"file":"slides/slide-16.html","title":"DS100 + FT Cloud","type":"content"},{"file":"slides/slide-17.html","title":"What if you want more?","type":"transition"},{"file":"slides/slide-18.html","title":"What's ahead. Sharp enough to spot it early.","type":"content"},{"file":"slides/slide-19.html","title":"We Fit Every Safety AI This Chip Could Carry.","type":"content"},{"file":"slides/slide-20.html","title":"Coverage → Precision","type":"transition"},{"file":"slides/slide-21.html","title":"Two lenses. One for your road.","type":"transition"},{"file":"slides/slide-22.html","title":"Choose the Outcome Your Fleet Needs First","type":"comparison"},{"file":"slides/slide-23.html","title":"Fleet Safety Accessible to All","type":"closing"},{"file":"slides/slide-24.html","title":"From Safety Visibility to Business Confidence","type":"closing"},{"file":"slides/slide-25.html","title":"One More Thing","type":"transition"},{"file":"slides/slide-26.html","title":"Thank You & Q&A","type":"closing"}];
+const META = {"title":"DS100","width":1920,"height":1080};
+const BASE_W = META.width;
+const BASE_H = META.height;
+
+// 演讲稿数据: 按原 SLIDES 顺序 (0-based 全局). filteredSlides 可能是 SLIDES 的子集,
+// 我们要用 origIdx 把 filtered 当前页映射到全局索引, 取到对应演讲稿 — 不然挑选播放
+// 后演讲稿会错位. 全部走 safeJSONForScript (AI 内容防 ASCII close-script 截断).
+window.__SPEECHES__ = ["DS100 Launch.","Today we will move from the cost of compromise, to the DS100 baseline, and finally to the connected safety loop it enables.","For a small fleet, one bad day can threaten the entire business. Operating costs and insurance pressure leave almost no room for a weak safety decision.","An AI dashcam can be the smartest dollar a tight-budget fleet spends: evidence helps resolve the dispute, while AI helps reduce the next risk.","The market still forces fleets between expensive enterprise subscriptions and cheap cameras that only record the loss. Neither choice fits the operator counting every dollar.","The lowest purchase price can hide the highest operational cost. Evidence quality, dependable AI, protected power and fleet-ready connectivity all have to survive the real road.","Before choosing the device, ask three questions: what is the true total cost, can compliance scale across markets, and can AI act before the next incident?","Meet DS100.","Now let us see what the new baseline is made of.","DS100 establishes a new baseline with dual 2MP video, industrial-grade hardware and effortless deployment.","Whichever version a fleet chooses, the evidence has to survive. DS100 combines protected storage, flexible connectivity and industrial-grade hardware for the moment that matters.","Coverage sees the whole cabin in any light, with a 172-degree field of view, automatic infrared and digital WDR.","Its wide road-facing view captures more context around the vehicle—especially cut-ins, intersections and incidents near the edge of frame.","A GPS dead zone does not have to become a safety blind spot. Dead Reckoning carries speed and positioning continuity when GNSS drops out.","EzInstaller guides the setup on the phone while two first-person installation views show the physical mount and cable connection. From windshield to ready, in minutes.","DS100 supports a privacy-conscious workflow so shared footage can protect identity without giving up the operational record.","Coverage begins as a compliance recorder, but it also brings seven cabin-facing DSC functions into the entry-level safety program.","DS100 detects and alerts at the edge; FT Cloud brings event video to the fleet team for monitoring, review and coaching. Detect, alert, upload, review and coach—the loop stays connected.\n\n[Sources]\nStreamax DS100 Product Specification\nStreamax DS100 User Manual","Coverage establishes the baseline. Now the question is whether a fleet needs more prevention, more precision and more intelligence before impact.","The Precision road-facing lens combines a focused 103-degree field of view, 3.85 millimeter focal length, F1.2 aperture and Digital WDR to pick out critical details farther ahead.","Precision combines road-facing ADAS with seven cabin-facing DSC functions—the focused safety AI an entry fleet needs to start a real program.","Coverage comes first: a wider field keeps more road context in view. Then Precision concentrates the optical strategy to preserve more detail farther ahead. The video on this transition page is a replaceable placeholder asset.","Watch the lens strategy switch in real time. Precision narrows and reaches forward; Coverage opens the frame to capture more of what happens around the vehicle.","Choose by the risk that matters first. Coverage protects the claim; Precision adds stronger prevention and coaching intelligence.","Fleet Safety Accessible to All. DS100 is the new baseline AI dashcam—focused on the protection fleets actually need.","DS100 helps fleets turn safety visibility into action. Connected events support faster response, dual-channel video strengthens incident review, and AI events with coaching records make safety management easier to verify. This gives the business greater confidence in how safety risks are managed.","One more thing.","Thank you. We welcome your questions."];
+window.__SPEAKER_TITLES__ = ["DS100 Launch","Agenda","One bad day can end the business.","An AI dashcam is the smartest dollar.","Too much to carry, or too little to trust.","The Hidden Cost","Three Questions Before the Baseline","Meet DS100","DS100 — Product Film","Fleet Safety Accessible to All","Uncompromised Reliability.","See the whole cabin. In any light.","What's ahead. Wide enough to miss nothing.","GPS Dead Zone?","EzInstaller","Every Face Pixelated. Every Frame Compliant.","A Compliance Recorder That Protects the Driver, Too.","DS100 + FT Cloud","What if you want more?","What's ahead. Sharp enough to spot it early.","We Fit Every Safety AI This Chip Could Carry.","Coverage → Precision","Two lenses. One for your road.","Choose the Outcome Your Fleet Needs First","Fleet Safety Accessible to All","From Safety Visibility to Business Confidence","One More Thing","Thank You & Q&A"];
+window.__SPEAKER_TPL__ = "<!doctype html>\n<html lang=\"zh\">\n<head>\n<meta charset=\"utf-8\">\n<title>演讲者视图 · Streamax</title>\n<style>\n*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}\nhtml,body{width:100vw;height:100vh;background:#0a0e1a;color:#e5e7eb;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Noto Sans SC',sans-serif;overflow:hidden;}\n:root{--border:rgba(255,255,255,0.08);--dim:#9ca3af;--accent:#2af598;--panel:#0f1424;}\n#root{display:flex;flex-direction:column;height:100vh;min-height:0;}\n\n/* HEADER */\nheader{display:flex;align-items:center;gap:14px;padding:10px 18px;background:rgba(0,0,0,0.32);border-bottom:1px solid var(--border);flex-shrink:0;}\n.page-num{font-family:'JetBrains Mono',monospace;color:var(--dim);font-size:0.82rem;letter-spacing:0.05em;font-variant-numeric:tabular-nums;background:rgba(255,255,255,0.04);padding:4px 10px;border-radius:6px;flex-shrink:0;}\n.title-cur{flex:1;font-weight:600;font-size:1rem;color:#f9fafb;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0;}\n.btn-row{display:flex;gap:6px;flex-shrink:0;align-items:center;}\n.btn-row .hdr-sep{width:1px;height:18px;background:var(--border);margin:0 2px;flex-shrink:0;}\n.btn-row button{background:rgba(255,255,255,0.05);border:1px solid var(--border);color:rgba(255,255,255,0.78);padding:5px 11px;border-radius:6px;font-size:0.78rem;cursor:pointer;font-family:inherit;min-width:32px;}\n.btn-row button:hover{background:rgba(255,255,255,0.12);color:#fff;}\n.btn-row button.primary{background:rgba(42,245,152,0.14);border-color:rgba(42,245,152,0.38);color:var(--accent);}\n\n/* MAIN AREA: 当前页 (左) | 下一页 + 演讲稿 (右) — 用 flex 嵌套, JS 把 preview box 撑到合身 */\n.main-area{flex:1;display:flex;gap:14px;padding:14px 18px;min-height:0;overflow:hidden;}\n.preview-panel{flex:1.6;display:flex;flex-direction:column;min-width:0;min-height:0;}\n.side-panel{flex:1;display:flex;flex-direction:column;gap:12px;min-width:240px;min-height:0;max-width:480px;}\n.panel-label{font-size:0.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.12em;margin-bottom:6px;display:flex;align-items:center;gap:6px;flex-shrink:0;}\n.panel-label .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--accent);}\n.panel-label.dim .dot{background:#6b7280;}\n\n/* preview-fit / next-fit: 父容器, JS 测量后写死内部 box 尺寸保 1920:720. align-items:center 让 box 垂直居中 — 1920:720 远比容器扁, 顶贴看着空 */\n.preview-fit{flex:1;min-height:0;display:flex;align-items:center;justify-content:center;}\n/* transform:translateZ(0) + isolation:isolate — 把 .preview-box 钉在自己的 GPU\n   合成层. 内部 iframe 切显/隐时不再触发 compositor layer 重分配, 大幅减轻高刷新率\n   /VRR 显示器对快速画面切换敏感产生的微闪 (overdrive overshoot / backlight strobe). */\n.preview-box{position:relative;background:#050810;border:1px solid var(--border);border-radius:10px;overflow:hidden;transform:translateZ(0);isolation:isolate;}\n\n/* N iframe 持久池: 每页一个 iframe lazy 创建后常驻. 切页用 opacity 渐变 +\n   content-visibility 双管:\n   - opacity 渐变 (120ms) 让画面切换在显示器上是渐变而非突变, 显著降低高刷屏微闪;\n   - content-visibility:hidden 让非 active iframe 跳过渲染省 CPU, 但用\n     transition-delay 配合 — 渐出时等 opacity 淡完才切 hidden, 渐入时立即转\n     visible 再淡入, 这样过渡期内画面真在画, 用户看不出有 content-visibility 在切. */\n.preview-box iframe.layer{\n  position:absolute;inset:0;width:100%;height:100%;border:0;background:#050810;\n  pointer-events:none;\n  opacity:0;\n  content-visibility:hidden;\n  transition:opacity 0.12s linear, content-visibility 0s linear 0.12s;\n}\n.preview-box iframe.layer.active{\n  opacity:1;\n  content-visibility:visible;\n  transition:opacity 0.12s linear, content-visibility 0s linear 0s;\n}\n.preview-box .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:0.9rem;font-style:italic;}\n\n.next-panel{display:flex;flex-direction:column;min-height:0;flex-shrink:0;}\n/* .next-fit 必须有非零高度才能让 JS fitBox 测出来. 加 aspect-ratio 把高度从宽度推\n   出来; max-height 防止 side panel 很宽时 next 占太多, 给下方演讲稿留出空间. */\n.next-fit{width:100%;aspect-ratio:1920/720;max-height:32vh;display:flex;align-items:center;justify-content:center;}\n.next-box{position:relative;background:#050810;border:1px solid var(--border);border-radius:10px;overflow:hidden;transform:translateZ(0);isolation:isolate;}\n.next-box iframe{position:absolute;inset:0;width:100%;height:100%;border:0;background:#050810;pointer-events:none;}\n.next-box .placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#4b5563;font-size:0.85rem;font-style:italic;letter-spacing:0.05em;}\n\n.notes-panel{flex:1;display:flex;flex-direction:column;min-height:120px;background:var(--panel);border:1px solid var(--border);border-radius:10px;overflow:hidden;}\n.notes-header{display:flex;align-items:center;justify-content:space-between;padding:8px 12px;border-bottom:1px solid var(--border);flex-shrink:0;}\n.notes-header .lbl{font-size:0.68rem;color:var(--dim);text-transform:uppercase;letter-spacing:0.12em;}\n.notes-body{flex:1;overflow-y:auto;padding:14px 16px;font-size:1.15rem;line-height:1.7;color:#e5e7eb;white-space:pre-wrap;letter-spacing:0.01em;min-height:0;}\n.notes-body::-webkit-scrollbar{width:6px;}\n.notes-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.15);border-radius:3px;}\n.notes-body .empty-hint{color:#6b7280;font-style:italic;text-align:center;padding:18px 12px;border:1px dashed rgba(255,255,255,0.1);border-radius:8px;font-size:0.85rem;line-height:1.55;}\n\n/* THUMBNAIL STRIP */\n.strip-wrap{padding:8px 14px 10px;background:rgba(0,0,0,0.3);border-top:1px solid var(--border);flex-shrink:0;}\n.strip-wrap .strip-meta{display:flex;align-items:center;gap:8px;padding:0 4px 6px;font-size:0.7rem;color:var(--dim);letter-spacing:0.05em;}\n.strip-meta .count{font-family:'JetBrains Mono',monospace;font-variant-numeric:tabular-nums;}\n.strip{display:flex;gap:8px;overflow-x:auto;overflow-y:hidden;scroll-behavior:smooth;padding:4px 4px 6px;scrollbar-width:thin;scrollbar-color:rgba(255,255,255,0.18) transparent;}\n.strip::-webkit-scrollbar{height:8px;}\n.strip::-webkit-scrollbar-thumb{background:rgba(255,255,255,0.18);border-radius:4px;}\n.strip::-webkit-scrollbar-track{background:transparent;}\n/* content-visibility:auto + contain-intrinsic-size: 滚出 strip 视口的 thumb 跳过\n   渲染. 不卸载 iframe srcdoc (内存上 iframe 仍在), 只是浏览器不画也不算 layout. */\n.thumb{flex:0 0 auto;width:132px;border:2px solid transparent;border-radius:6px;cursor:pointer;background:rgba(255,255,255,0.04);overflow:hidden;display:flex;flex-direction:column;transition:border-color 0.15s, transform 0.15s, box-shadow 0.15s;user-select:none;content-visibility:auto;contain-intrinsic-size:132px 80px;}\n.thumb:hover{border-color:rgba(255,255,255,0.22);transform:translateY(-2px);}\n.thumb.active{border-color:var(--accent);box-shadow:0 0 14px rgba(42,245,152,0.28);}\n.thumb-frame{position:relative;width:100%;aspect-ratio:1920/720;background:#050810;overflow:hidden;}\n.thumb-frame iframe{position:absolute;inset:0;width:100%;height:100%;border:0;pointer-events:none;}\n.thumb-frame .click-mask{position:absolute;inset:0;background:transparent;}\n.thumb-label{display:flex;align-items:center;gap:6px;padding:4px 8px;font-size:0.68rem;color:var(--dim);font-variant-numeric:tabular-nums;background:rgba(0,0,0,0.4);}\n.thumb-label .num{color:rgba(255,255,255,0.5);font-family:'JetBrains Mono',monospace;font-size:0.65rem;flex-shrink:0;}\n.thumb-label .ttl{flex:1;color:rgba(229,231,235,0.7);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:0.7rem;}\n.thumb.active .num{color:var(--accent);}\n.thumb.active .ttl{color:#fff;}\n\n/* narrow window: stack 当前页 above 下一页+演讲稿 */\n@media (max-width: 720px){\n  .main-area{flex-direction:column;gap:10px;padding:10px 12px;}\n  .preview-panel{flex:0 0 auto;}\n  .side-panel{flex:1;max-width:none;}\n}\n</style>\n</head>\n<body>\n<div id=\"root\">\n  <header>\n    <span class=\"page-num\" id=\"page-num\">--/--</span>\n    <span class=\"title-cur\" id=\"title-cur\">载入中…</span>\n    <div class=\"btn-row\">\n      <button onclick=\"__fz(-1)\" title=\"缩小演讲稿\">A-</button>\n      <button onclick=\"__fz(1)\" title=\"放大演讲稿\">A+</button>\n      <span class=\"hdr-sep\"></span>\n      <button onclick=\"__prev()\" title=\"上一页 (←)\">←</button>\n      <button class=\"primary\" onclick=\"__next()\" title=\"下一页 (→ / Space)\">→</button>\n    </div>\n  </header>\n\n  <div class=\"main-area\">\n    <div class=\"preview-panel\">\n      <div class=\"panel-label\"><span class=\"dot\"></span>当前页</div>\n      <div class=\"preview-fit\" id=\"cur-fit\">\n        <div class=\"preview-box\" id=\"cur-box\">\n          <!-- 当前页 iframe 池: 每页 lazy 创建后常驻, JS append. 切页只切 .active -->\n        </div>\n      </div>\n    </div>\n\n    <div class=\"side-panel\">\n      <div class=\"next-panel\">\n        <div class=\"panel-label dim\"><span class=\"dot\"></span>下一页</div>\n        <div class=\"next-fit\" id=\"next-fit\">\n          <div class=\"next-box\" id=\"next-box\">\n            <iframe id=\"next-frame\"></iframe>\n            <div class=\"placeholder\" id=\"next-placeholder\" style=\"display:none\">— 最后一页 —</div>\n          </div>\n        </div>\n      </div>\n      <div class=\"notes-panel\">\n        <div class=\"notes-header\">\n          <span class=\"lbl\">演讲稿</span>\n        </div>\n        <div class=\"notes-body\" id=\"speech-body\"></div>\n      </div>\n    </div>\n  </div>\n\n  <div class=\"strip-wrap\">\n    <div class=\"strip-meta\"><span class=\"count\" id=\"strip-count\">--</span><span>缩略图 · 点击跳页 / ←→ 翻页</span></div>\n    <div class=\"strip\" id=\"strip\"></div>\n  </div>\n</div>\n\n<script>\n(function(){\n  var SPEECHES = \"%SPEECHES%\";\n  var TITLES = \"%TITLES%\";\n  // SLIDES[i] 是原始 HTML 字符串 (assembleHTML 模式) 或绝对 URL (buildPlayerHTML 模式).\n  // 以 '<' 开头判定为 HTML, 走 srcdoc; 否则走 src.\n  var SLIDES = \"%SLIDES%\";\n  var current = \"%INITIAL_IDX%\";\n  var total = TITLES.length;\n\n  var ASPECT = 1920 / 720;\n\n  var pageNumEl = document.getElementById('page-num');\n  var titleEl = document.getElementById('title-cur');\n  var bodyEl = document.getElementById('speech-body');\n  var curFit = document.getElementById('cur-fit');\n  var curBox = document.getElementById('cur-box');\n  var nextFit = document.getElementById('next-fit');\n  var nextBox = document.getElementById('next-box');\n  var nextFrame = document.getElementById('next-frame');\n  var nextPlaceholder = document.getElementById('next-placeholder');\n  var stripEl = document.getElementById('strip');\n  var stripCountEl = document.getElementById('strip-count');\n\n  // 当前页 iframe 持久池 — 同主播放器策略: 每页一个 iframe lazy 创建后常驻,\n  // 切页只切 display none/block. 永不 reload, 永不 srcdoc 重写.\n  var curPool = {};  // idx → HTMLIFrameElement\n\n  // 跟踪每个 iframe 上次写入的 src/srcdoc — 重复写同样内容直接跳过.\n  var lastSrcMap = new WeakMap();\n\n  // 在 max-width / max-height 双约束下保 1920:720 比例.\n  // CSS aspect-ratio + width:100% 在小窗会撑高过容器, 改 JS 测量后写死像素值.\n  function fitBox(container, box){\n    if(!container || !box) return;\n    var pw = container.clientWidth;\n    var ph = container.clientHeight;\n    if(pw <= 0 || ph <= 0) return;\n    var w, h;\n    if(pw / ph > ASPECT){\n      h = ph;\n      w = h * ASPECT;\n    } else {\n      w = pw;\n      h = w / ASPECT;\n    }\n    box.style.width = Math.floor(w) + 'px';\n    box.style.height = Math.floor(h) + 'px';\n  }\n  function fitAll(){ fitBox(curFit, curBox); fitBox(nextFit, nextBox); }\n\n  var fontSize = 1.15;\n  function applyFs(){ bodyEl.style.fontSize = fontSize.toFixed(2) + 'rem'; }\n  window.__fz = function(dir){\n    fontSize = Math.max(0.7, Math.min(2.6, +(fontSize + dir * 0.1).toFixed(2)));\n    applyFs();\n  };\n\n  function pad(n){ return n < 10 ? '0' + n : String(n); }\n\n  function setFrame(iframe, src){\n    if(!iframe) return;\n    var prev = lastSrcMap.get(iframe);\n    if(prev === src) return;   // 内容没变直接跳过 — 防 reload 闪屏 + 省 CPU\n    lastSrcMap.set(iframe, src);\n    if(typeof src !== 'string' || src.length === 0){\n      iframe.removeAttribute('srcdoc');\n      iframe.removeAttribute('src');\n      return;\n    }\n    // 跳过前导空白后判定: '<' 起头当 HTML (assembleHTML 模式) 走 srcdoc;\n    // 否则视为 URL (buildPlayerHTML 模式) 走 src.\n    var i = 0; while(i < src.length && (src.charCodeAt(i) <= 32)) i++;\n    if(src.charAt(i) === '<'){\n      iframe.removeAttribute('src');\n      iframe.srcdoc = src;\n    } else {\n      iframe.removeAttribute('srcdoc');\n      iframe.src = src;\n    }\n  }\n\n  // 副窗 iframe 加载完后注入\"快进动画\"CSS — 用于缩略图 + 主/次 preview.\n  //\n  // 不能直接 animation:none — slide 模板的 entrance 套路是 base style 设 opacity:0,\n  // 再 animation forwards 推到 opacity:1. animation:none 把动画废了, 元素永远停在\n  // opacity:0 → 内容全空. 改用 animation-duration:0.001s + iteration-count:1 让\n  // 动画\"瞬间播完\" — fill-mode:forwards 自然把元素送到 final state, 既不闪屏也不\n  // 丢内容. infinite 循环也被压成 1 次, 不再持续吃 CPU.\n  function killAnims(iframe){\n    try {\n      var doc = iframe.contentDocument;\n      if(!doc || !doc.head) return;\n      if(doc.head.querySelector('style[data-kill]')) return;\n      var s = doc.createElement('style');\n      s.setAttribute('data-kill', '1');\n      s.textContent = '*,*::before,*::after{' +\n        'animation-duration:0.001s !important;' +\n        'animation-delay:0s !important;' +\n        'animation-iteration-count:1 !important;' +\n        'animation-play-state:running !important;' +\n        'transition-duration:0s !important;' +\n        'transition-delay:0s !important;' +\n      '}';\n      doc.head.appendChild(s);\n    } catch(e){}\n  }\n\n  // 创建 (或复用) 当前页 pool 里 idx 对应的 iframe. 第一次访问触发一次 reload,\n  // 后续切回同一页就是 instant. 这是性能关键 — 替代之前每次切都 reload 的 curA/curB.\n  function ensureCur(idx){\n    if(idx < 0 || idx >= total) return null;\n    if(curPool[idx]) return curPool[idx];\n    var f = document.createElement('iframe');\n    f.className = 'layer';\n    f.setAttribute('tabindex', '-1');\n    f.dataset.idx = String(idx);\n    f.addEventListener('load', (function(el){ return function(){ killAnims(el); }; })(f));\n    curBox.appendChild(f);\n    setFrame(f, SLIDES[idx] || '');\n    curPool[idx] = f;\n    return f;\n  }\n\n  // 显示 idx 对应的当前页 iframe, 其它隐藏. 顺手预取 ±1 / +2 让顺序翻页全 instant.\n  function showCur(idx){\n    var target = ensureCur(idx);\n    for(var k in curPool){\n      if(curPool[k] === target) curPool[k].classList.add('active');\n      else curPool[k].classList.remove('active');\n    }\n    // 后台预取邻居 — 不阻塞当前显示\n    if(idx + 1 < total) setTimeout(function(){ ensureCur(idx + 1); }, 0);\n    if(idx - 1 >= 0) setTimeout(function(){ ensureCur(idx - 1); }, 60);\n    if(idx + 2 < total) setTimeout(function(){ ensureCur(idx + 2); }, 120);\n  }\n\n  // 建 N 个 thumb card. 每个 iframe 不立即 setFrame, 由 preloadThumbsStaggered\n  // 按优先级 (current → 向外) 分批装入, 避免初次开窗 N 并发 iframe load 卡死.\n  function buildStrip(){\n    stripCountEl.textContent = pad(current+1) + ' / ' + pad(total);\n    var frag = document.createDocumentFragment();\n    for(var i = 0; i < total; i++){\n      var card = document.createElement('div');\n      card.className = 'thumb' + (i === current ? ' active' : '');\n      card.setAttribute('data-idx', String(i));\n      card.onclick = (function(idx){ return function(){ gotoIdx(idx); }; })(i);\n      var frame = document.createElement('div'); frame.className = 'thumb-frame';\n      var f = document.createElement('iframe');\n      f.setAttribute('tabindex', '-1');\n      // load 时杀动画 — slide 内 entrance 动画瞬间播完, 不持续吃 CPU\n      f.addEventListener('load', (function(el){ return function(){ killAnims(el); }; })(f));\n      frame.appendChild(f);\n      var mask = document.createElement('div'); mask.className = 'click-mask';\n      frame.appendChild(mask);\n      var lbl = document.createElement('div'); lbl.className = 'thumb-label';\n      var num = document.createElement('span'); num.className = 'num';\n      num.textContent = pad(i+1) + '/' + pad(total);\n      var ttl = document.createElement('span'); ttl.className = 'ttl';\n      ttl.textContent = TITLES[i] || '(未命名)';\n      lbl.appendChild(num); lbl.appendChild(ttl);\n      card.appendChild(frame); card.appendChild(lbl);\n      frag.appendChild(card);\n    }\n    stripEl.appendChild(frag);\n  }\n\n  // 给 idx 对应的 thumb 装 srcdoc — 已经装过的直接返回. 用户跳页时可即时调.\n  function ensureThumb(idx){\n    if(idx < 0 || idx >= total) return;\n    var iframe = stripEl.querySelector('.thumb[data-idx=\"' + idx + '\"] iframe');\n    if(!iframe || lastSrcMap.get(iframe)) return;\n    setFrame(iframe, SLIDES[idx] || '');\n  }\n\n  // 按优先级分批预装 thumb — current 最优先, 然后向两侧螺旋扩散. 每 tick 装 2 个,\n  // 间隔 40ms, 30 页 deck 全装完 ~600ms, 不阻塞首屏显示.\n  function preloadThumbsStaggered(){\n    var order = [current];\n    for(var d = 1; d < total; d++){\n      if(current + d < total) order.push(current + d);\n      if(current - d >= 0) order.push(current - d);\n    }\n    var i = 0;\n    function tick(){\n      if(i >= order.length) return;\n      var batchEnd = Math.min(i + 2, order.length);\n      while(i < batchEnd){ ensureThumb(order[i]); i++; }\n      setTimeout(tick, 40);\n    }\n    tick();\n  }\n\n  function scrollActiveIntoView(){\n    var active = stripEl.querySelector('.thumb.active');\n    if(!active) return;\n    var stripRect = stripEl.getBoundingClientRect();\n    var aRect = active.getBoundingClientRect();\n    var offset = (aRect.left + aRect.right) / 2 - (stripRect.left + stripRect.right) / 2;\n    if(Math.abs(offset) > 2) stripEl.scrollBy({ left: offset, behavior: 'smooth' });\n  }\n\n  function refreshStripActive(){\n    var cards = stripEl.querySelectorAll('.thumb');\n    for(var i = 0; i < cards.length; i++){\n      var idx = parseInt(cards[i].getAttribute('data-idx'), 10);\n      if(idx === current) cards[i].classList.add('active');\n      else cards[i].classList.remove('active');\n    }\n  }\n\n  function render(){\n    pageNumEl.textContent = pad(current+1) + ' / ' + pad(total);\n    titleEl.textContent = TITLES[current] || '(未命名)';\n    document.title = pad(current+1) + '/' + pad(total) + ' · ' + (TITLES[current] || '演讲者视图');\n    stripCountEl.textContent = pad(current+1) + ' / ' + pad(total);\n\n    // 演讲稿\n    var speech = SPEECHES[current];\n    if(speech && speech.trim()){\n      bodyEl.textContent = speech;\n    } else {\n      bodyEl.innerHTML = '<div class=\"empty-hint\">这一页没演讲稿. 回到 preview 阶段点「生成演讲稿」, 或在编辑器手写一段即可.</div>';\n    }\n    bodyEl.scrollTop = 0;\n\n    // 当前页 preview — 池里 lazy 缓存的 iframe 切 .active, 不 reload\n    showCur(current);\n\n    // 当前缩略图也确保即时装入 (用户从外部 sync 跳到没装入的页时)\n    ensureThumb(current);\n\n    // 下一页 preview — 单 iframe, setFrame 内部已 dedupe (lastSrcMap), 同样 src 不重载\n    if(current + 1 < total){\n      nextPlaceholder.style.display = 'none';\n      nextFrame.style.display = '';\n      setFrame(nextFrame, SLIDES[current + 1] || '');\n    } else {\n      nextFrame.style.display = 'none';\n      setFrame(nextFrame, '');\n      nextPlaceholder.style.display = '';\n    }\n\n    refreshStripActive();\n    scrollActiveIntoView();\n  }\n\n  function gotoIdx(idx){\n    if(idx < 0 || idx >= total) return;\n    if(idx === current) return;\n    current = idx;\n    render();\n    try { if(window.opener && !window.opener.closed) window.opener.postMessage({source:'speaker',type:'goto',idx:current}, '*'); } catch(e){}\n  }\n  window.__prev = function(){ gotoIdx(current - 1); };\n  window.__next = function(){ gotoIdx(current + 1); };\n\n  window.addEventListener('message', function(e){\n    var d = e && e.data; if(!d) return;\n    if(d.source === 'player' && d.type === 'sync' && typeof d.idx === 'number'){\n      var newIdx = Math.max(0, Math.min(total - 1, d.idx));\n      if(newIdx === current) return;\n      current = newIdx;\n      render();\n    }\n  });\n\n  document.addEventListener('keydown', function(e){\n    if(e.key === 'ArrowLeft' || e.key === 'PageUp'){ e.preventDefault(); __prev(); }\n    else if(e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown'){ e.preventDefault(); __next(); }\n    else if(e.key === 'Home'){ e.preventDefault(); gotoIdx(0); }\n    else if(e.key === 'End'){ e.preventDefault(); gotoIdx(total - 1); }\n    else if(e.key === '+' || e.key === '='){ __fz(1); }\n    else if(e.key === '-'){ __fz(-1); }\n  });\n\n  // 下一页 iframe 也杀动画 — slide entrance 起始 opacity 0, 不杀看着像空白闪一下\n  nextFrame.addEventListener('load', function(){ killAnims(nextFrame); });\n\n  buildStrip();\n  applyFs();\n  fitAll();\n  render();\n  // 后台分批预装其余 thumb (current 已被 render() ensureThumb 装了)\n  preloadThumbsStaggered();\n  // 进窗后下一帧再 fit + 居中缩略图 — flexbox 还在算尺寸, 首次直接 fit 会偏\n  setTimeout(function(){ fitAll(); scrollActiveIntoView(); }, 60);\n  window.addEventListener('resize', fitAll);\n\n  // 通知 opener 自己已就绪, opener 应该立即回送当前 idx\n  try { if(window.opener && !window.opener.closed) window.opener.postMessage({source:'speaker',type:'ready'}, '*'); } catch(e){}\n})();\n<\/script>\n</body>\n</html>";
+// 演讲者副窗用的 slide src 列表 — 离线播放器走相对路径加载 (file://), 副窗 blob:
+// URL 无法解析相对路径, 这里在 player 端解析成绝对 URL. 副窗 iframe 走 src 加载.
+window.__SLIDES_FOR_SPEAKER__ = function(){
+  var urls = [];
+  for (var i = 0; i < SLIDES.length; i++){
+    try { urls.push(new URL(SLIDES[i].file, location.href).href); }
+    catch(e){ urls.push(SLIDES[i].file); }
+  }
+  return urls;
+};
+
+
+// 默认全选；filteredSlides 在 startPlay 时生成
+let selected = new Set(SLIDES.map(function(_, i){ return i; }));
+let filteredSlides = [];        // 元素: { ...meta, origIdx: number }
+let current = 0;
+// 播放模式 — picker 阶段 setMode 切, startPlay 时根据 mode 决定要不要弹 popup speaker
+let playMode = 'normal';
+
+// buildPlayerHTML: current 是 filtered idx, 要 map 回 origIdx
+window.__getCurrentGlobalIdx = function(){
+  return (filteredSlides[current] && filteredSlides[current].origIdx) || 0;
+};
+// popup speaker 反向 goto: 携带 origIdx (全局), 转成 filtered idx 后 show
+window.__playerGoto = function(origIdx){
+  for (var i = 0; i < filteredSlides.length; i++){
+    if (filteredSlides[i].origIdx === origIdx) { show(i); return; }
+  }
+};
+
+
+var __speakerWin = null;
+
+function __safeJSON(v){
+  return JSON.stringify(v).replace(/<\/script/gi, '<\\/script');
+}
+
+function __notifySpeakerSync(idx){
+  if(!__speakerWin || __speakerWin.closed) return;
+  try { __speakerWin.postMessage({source:'player',type:'sync',idx:idx}, '*'); } catch(e){}
+}
+
+window.openSpeakerWindow = function(){
+  if(__speakerWin && !__speakerWin.closed){ __speakerWin.focus(); return; }
+  // __SLIDES_FOR_SPEAKER__: assembleHTML 模式塞原始 HTML 字符串数组,
+  // buildPlayerHTML 模式塞绝对 URL 数组. popup 端按首字符判 srcdoc / src.
+  var slidesForSpeaker = window.__SLIDES_FOR_SPEAKER__;
+  if(typeof slidesForSpeaker === 'function') slidesForSpeaker = slidesForSpeaker();
+  if(!Array.isArray(slidesForSpeaker)) slidesForSpeaker = [];
+  var html = window.__SPEAKER_TPL__
+    .replace('"%SPEECHES%"', __safeJSON(window.__SPEECHES__ || []))
+    .replace('"%TITLES%"', __safeJSON(window.__SPEAKER_TITLES__ || []))
+    .replace('"%SLIDES%"', __safeJSON(slidesForSpeaker))
+    .replace('"%INITIAL_IDX%"', String(
+      (typeof window.__getCurrentGlobalIdx === 'function')
+        ? window.__getCurrentGlobalIdx()
+        : 0
+    ));
+  // 用 about:blank + document.write — 让 popup 继承 opener 的 origin (file://),
+  // 副窗 iframe 加载 file:// 的 slide URL 同源放行. 用 blob URL 开窗会跑到
+  // blob:null/... 副窗 iframe 加载 file:// 被 Chrome 拦 ("Not allowed to load
+  // local resource"). React 顶层 in-app 路径不走这条 — 见 buildSpeakerWindowHTML.
+  __speakerWin = window.open('about:blank', 'streamax-speaker', 'width=1280,height=800,scrollbars=yes,resizable=yes');
+  if(!__speakerWin){
+    try { console.warn('[speaker] popup blocked — allow popups and retry'); } catch(e){}
+    return;
+  }
+  try {
+    __speakerWin.document.open();
+    __speakerWin.document.write(html);
+    __speakerWin.document.close();
+  } catch(e){
+    try { console.warn('[speaker] document.write failed', e); } catch(_){}
+    try { __speakerWin.close(); } catch(_){}
+    __speakerWin = null;
+  }
+};
+
+window.closeSpeakerWindow = function(){
+  if(__speakerWin && !__speakerWin.closed) __speakerWin.close();
+  __speakerWin = null;
+};
+
+window.addEventListener('message', function(e){
+  var d = e && e.data; if(!d) return;
+  if(d.source === 'speaker' && d.type === 'goto' && typeof d.idx === 'number'){
+    if(typeof window.__playerGoto === 'function') window.__playerGoto(d.idx);
+  } else if(d.source === 'speaker' && d.type === 'ready'){
+    var idx = (typeof window.__getCurrentGlobalIdx === 'function')
+      ? window.__getCurrentGlobalIdx()
+      : 0;
+    __notifySpeakerSync(idx);
+  }
+});
+
+
+// picker 阶段切换播放模式 — 视觉换 active pill
+window.setMode = function(mode){
+  playMode = mode;
+  var pills = document.querySelectorAll('#mode-toggle button');
+  for (var i = 0; i < pills.length; i++){
+    if (pills[i].dataset.mode === mode) pills[i].classList.add('active');
+    else pills[i].classList.remove('active');
+  }
+};
+
+// picker 卡片下方 toggle 展开/收起演讲稿编辑区
+window.toggleCardSpeech = function(i, ev){
+  if (ev) ev.stopPropagation();
+  var card = document.querySelector('.card[data-idx="' + i + '"]');
+  if (card) card.classList.toggle('speech-open');
+};
+
+// 用户在 picker 卡片里改演讲稿 — 实时写回 window.__SPEECHES__
+window.updateCardSpeech = function(i, value, ev){
+  if (ev) ev.stopPropagation();
+  if (!Array.isArray(window.__SPEECHES__)) window.__SPEECHES__ = [];
+  // 保证数组够长
+  while (window.__SPEECHES__.length < SLIDES.length) window.__SPEECHES__.push('');
+  window.__SPEECHES__[i] = value;
+  // 更新卡片 has-speech 类 + 字数显示
+  var card = document.querySelector('.card[data-idx="' + i + '"]');
+  if (card){
+    if (value && value.trim()) card.classList.add('has-speech');
+    else card.classList.remove('has-speech');
+    var hint = card.querySelector('.len-hint');
+    if (hint) hint.textContent = (value || '').length + ' 字';
+    var dot = card.querySelector('.has-dot');
+    if (dot) dot.style.display = (value && value.trim()) ? 'inline-block' : 'none';
+  }
+};
+
+const picker = document.getElementById('picker');
+const player = document.getElementById('player');
+const grid = document.getElementById('grid');
+const selectedCountEl = document.getElementById('selected-count');
+const playBtn = document.getElementById('play-btn');
+const stage = document.getElementById('stage');
+const counter = document.getElementById('nav-counter');
+const viewport = document.getElementById('viewport');
+const navBar = document.getElementById('nav-bar');
+const controlWakeZone = document.getElementById('control-wake-zone');
+
+// Parent-owned media permission. Required for local file:// playback because
+// embedded slide documents cannot reliably inspect their parent iframe.
+function setFrameMediaActive(frame, active){
+  if (!frame) return;
+  try {
+    if (frame.contentWindow) frame.contentWindow.postMessage({
+      source: 'meetdeck-player', type: 'media-active', active: !!active
+    }, '*');
+  } catch(e){}
+  if (!active) {
+    try {
+      const media = frame.contentDocument && frame.contentDocument.querySelectorAll('video,audio');
+      if (media) for (let i = 0; i < media.length; i++) media[i].pause();
+    } catch(e){}
+  }
+}
+
+function silencePickerFrames(unload){
+  const frames = grid.querySelectorAll('iframe.thumb');
+  for (let i = 0; i < frames.length; i++) {
+    setFrameMediaActive(frames[i], false);
+    if (unload) frames[i].src = 'about:blank';
+  }
+}
+
+function escapeHTML(s){
+  return String(s).replace(/[&<>"']/g, function(c){ return ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]; });
+}
+
+function buildGrid(){
+  const hasSpeechFeature = (window.__SPEAKER_TITLES__ || []).length > 0;
+  const speeches = window.__SPEECHES__ || [];
+  let html = '';
+  for (let i = 0; i < SLIDES.length; i++){
+    const s = SLIDES[i];
+    const isSel = selected.has(i);
+    const speech = speeches[i] || '';
+    const hasSp = !!speech.trim();
+    let cls = 'card' + (isSel ? ' selected' : ' deselected');
+    if (hasSp) cls += ' has-speech';
+    const num = String(i + 1).padStart(2, '0');
+    // 整张卡片可点 = 切选中. 内部 speech-edit-toggle / textarea 各自 stopPropagation
+    // 避免冒泡到 card 误触发选中切换.
+    // 所有 handler 用 this 读 data-idx 而非闭包 i, 重建 DOM 后无需更新 onclick 字符串
+    html += '<div class="' + cls + '" data-idx="' + i + '"' +
+              ' onclick="toggleSelByEl(this, event)">' +
+              '<span class="check"></span>' +
+              // drag handle — handle 区域 draggable, 拖时整张卡作为 dragImage
+              '<span class="drag-handle" draggable="true"' +
+              ' ondragstart="onCardDragStartByEl(this, event)"' +
+              ' ondragend="onCardDragEndByEl(this, event)"' +
+              ' onclick="event.stopPropagation()"' +
+              ' title="拖动调整顺序">' +
+                '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="6" r="0.5" fill="currentColor"/><circle cx="9" cy="12" r="0.5" fill="currentColor"/><circle cx="9" cy="18" r="0.5" fill="currentColor"/><circle cx="15" cy="6" r="0.5" fill="currentColor"/><circle cx="15" cy="12" r="0.5" fill="currentColor"/><circle cx="15" cy="18" r="0.5" fill="currentColor"/></svg>' +
+              '</span>' +
+              '<div class="thumb-wrap"><iframe class="thumb" src="' + escapeHTML(s.file) + '" loading="lazy" tabindex="-1"></iframe></div>' +
+              '<div class="meta">' +
+                '<div class="meta-top"><span class="num">' + num + '</span><span class="type">' + escapeHTML(s.type) + '</span></div>' +
+                '<span class="title">' + escapeHTML(s.title) + '</span>' +
+              '</div>';
+    if (hasSpeechFeature) {
+      html +=   '<button class="speech-edit-toggle" onclick="toggleCardSpeech(' + i + ', event)">' +
+                  '<span style="display:inline-flex;align-items:center;gap:6px">' +
+                    '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>' +
+                    '该页演讲稿' +
+                    '<span class="has-dot" style="display:' + (hasSp ? 'inline-block' : 'none') + '"></span>' +
+                  '</span>' +
+                  '<svg class="toggle-arrow" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>' +
+                '</button>' +
+                '<div class="speech-edit-body" onclick="event.stopPropagation()">' +
+                  '<textarea placeholder="在此输入或调整本页演讲稿…" oninput="updateCardSpeech(' + i + ', this.value, event)">' + escapeHTML(speech) + '</textarea>' +
+                  '<div class="len-hint">' + speech.length + ' 字</div>' +
+                '</div>';
+    }
+    html +=   '</div>';
+  }
+  grid.innerHTML = html;
+  const thumbs = grid.querySelectorAll('iframe.thumb');
+  for (let i = 0; i < thumbs.length; i++) {
+    thumbs[i].addEventListener('load', function(){ setFrameMediaActive(this, false); });
+    setFrameMediaActive(thumbs[i], false);
+  }
+}
+
+function refreshCardClasses(){
+  const cards = grid.querySelectorAll('.card');
+  for (let i = 0; i < cards.length; i++){
+    if (selected.has(i)){ cards[i].classList.add('selected'); cards[i].classList.remove('deselected'); }
+    else { cards[i].classList.remove('selected'); cards[i].classList.add('deselected'); }
+  }
+  selectedCountEl.textContent = selected.size;
+  playBtn.disabled = selected.size === 0;
+}
+
+window.toggleSel = function(i, ev){
+  if (ev) ev.stopPropagation();
+  if (selected.has(i)) selected.delete(i);
+  else selected.add(i);
+  refreshCardClasses();
+};
+
+// 元素引用版 — 重建 DOM 后无需更新闭包参数, 直接从 this.dataset.idx 读
+window.toggleSelByEl = function(el, ev){
+  if (ev) ev.stopPropagation();
+  // 拖动期间不响应 click (避免松手时误触发选中切换)
+  if (dragSession) return;
+  const i = parseInt(el.dataset.idx, 10);
+  if (selected.has(i)) selected.delete(i);
+  else selected.add(i);
+  refreshCardClasses();
+};
+
+window.selectAll = function(){
+  selected = new Set(SLIDES.map(function(_, i){ return i; }));
+  refreshCardClasses();
+};
+
+window.selectNone = function(){
+  selected = new Set();
+  refreshCardClasses();
+};
+
+window.invertSelection = function(){
+  const inv = new Set();
+  for (let i = 0; i < SLIDES.length; i++){ if (!selected.has(i)) inv.add(i); }
+  selected = inv;
+  refreshCardClasses();
+};
+
+// ─── 加入本地 slide.html ───────────────────────────────────────
+// 离线 file:// 不能扫目录, 所以让用户主动选文件: FileReader 读自包含 HTML → blob: URL
+// → 当一张普通卡片 push 进 SLIDES (默认选中). 自然吃现有的勾选 + 拖拽排序 + 按位播放。
+window.addLocalSlides = function(fileList){
+  const files = fileList ? Array.prototype.slice.call(fileList) : [];
+  if (!files.length) return;
+  let pending = 0, added = 0;
+  files.forEach(function(file){
+    if (!/\.html?$/i.test(file.name)) return;
+    pending++;
+    const reader = new FileReader();
+    reader.onload = function(){
+      try {
+        const html = String(reader.result || '');
+        const url = URL.createObjectURL(new Blob([html], { type: 'text/html' }));
+        const title = file.name.replace(/\.html?$/i, '');
+        SLIDES.push({ file: url, title: title, type: '外部', added: true });
+        selected.add(SLIDES.length - 1);   // 主动选的文件, 默认就纳入播放
+        added++;
+      } catch(e){ /* 单个文件失败不影响其它 */ }
+      pending--;
+      if (pending === 0){
+        buildGrid();
+        refreshCardClasses();
+        const tc = document.getElementById('total-count');
+        if (tc) tc.textContent = SLIDES.length;
+        if (added){
+          // 滚到底, 让用户看见新加的卡
+          const g = document.getElementById('grid');
+          if (g) g.scrollIntoView({ block: 'end', behavior: 'smooth' });
+        }
+      }
+    };
+    reader.onerror = function(){ pending--; };
+    reader.readAsText(file);
+  });
+};
+
+// ─── Picker 拖拽排序 (手机桌面长按移动观感) ──────────────────────
+//
+// 设计: HTML5 native drag (离线 zip 不能引依赖) + 实时让位 + ghost 落点.
+//
+//   - dragstart 记录 dragSession (fromIdx + 拖前所有卡 rects)
+//   - dragover 节流 (rAF) 算 insertAt → previewReorder 给每张卡 inline transform
+//     translate(dx, dy) 到"虚拟新位置". ghost 元素 translate 到落点真实坐标
+//   - drop: 数据 splice + buildGrid 重建 DOM. 因为 transform 已经在视觉上让卡到了
+//     真实新位置, 重建后新 DOM 在同一位置, 视觉无跳变
+//   - dragend / dragleave (拖出 grid): 清所有 transform + 隐 ghost → 卡片柔和滑回原位
+
+let dragSession = null;
+let dragOverFrame = 0;
+let lastPreviewInsertAt = -1;
+
+function getGridCols(cardsList){
+  // 比 computedStyle 更稳: 看第一行有几张卡 (offsetTop 跟 cards[0] 一样的就是同一行).
+  // auto-fill grid 的 gridTemplateColumns computed 值在某些浏览器返回展开式, 某些返回 'repeat(...)' 原文, 不可靠.
+  if (!cardsList || cardsList.length === 0) return 1;
+  const firstTop = cardsList[0].offsetTop;
+  for (let i = 1; i < cardsList.length; i++){
+    if (cardsList[i].offsetTop !== firstTop) return i;
+  }
+  return cardsList.length; // 所有卡都在同一行
+}
+
+function clearPreviewTransforms(){
+  const cards = grid.querySelectorAll('.card');
+  for (let i = 0; i < cards.length; i++){
+    cards[i].style.transform = '';
+  }
+}
+
+/**
+ * 给所有卡 translate 到"虚拟新位置 (= 如果现在松手会得到的顺序)".
+ * 不改 SLIDES 数据, 只视觉预演.
+ */
+function previewReorder(insertAt){
+  if (!dragSession) return;
+  if (insertAt === lastPreviewInsertAt) return; // 节流: 落点没变不重算
+  lastPreviewInsertAt = insertAt;
+
+  const from = dragSession.fromIdx;
+  const cards = dragSession.cards;
+  const cols = dragSession.cols;
+  const sample = cards[0];
+  if (!sample) return;
+  const cardW = sample.offsetWidth;
+  const cardH = sample.offsetHeight;
+  const gap = dragSession.gap;
+
+  // 算每张卡的虚拟新 idx (除被拖卡外, 全部连续填位)
+  // newOrder[origIdx] = 新位置
+  const newOrder = {};
+  let cursor = 0;
+  for (let i = 0; i < cards.length; i++){
+    if (i === from) continue;
+    if (cursor === insertAt) cursor++; // 跳过预留给被拖卡的位置
+    newOrder[i] = cursor;
+    cursor++;
+  }
+  newOrder[from] = insertAt > cards.length - 1 ? cards.length - 1 : insertAt;
+  // 修正: 如果 insertAt 在末尾且 cursor 已经走完, 被拖卡放最后
+  // (上面逻辑已经处理 cursor === insertAt 跳一格的情况)
+
+  // 应用 transform
+  for (let i = 0; i < cards.length; i++){
+    const card = cards[i];
+    if (i === from) {
+      // 被拖卡 — 跟随原生 dragImage, 原 DOM 位置维持 (半透 .dragging 已加)
+      card.style.transform = '';
+      continue;
+    }
+    const oldRow = Math.floor(i / cols);
+    const oldCol = i % cols;
+    const newPos = newOrder[i];
+    const newRow = Math.floor(newPos / cols);
+    const newCol = newPos % cols;
+    const dx = (newCol - oldCol) * (cardW + gap);
+    const dy = (newRow - oldRow) * (cardH + gap);
+    if (dx === 0 && dy === 0) card.style.transform = '';
+    else card.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+  }
+}
+
+window.onCardDragStartByEl = function(handleEl, ev){
+  const card = handleEl.closest('.card');
+  if (!card) return;
+  const fromIdx = parseInt(card.dataset.idx, 10);
+  const cardsList = Array.prototype.slice.call(grid.querySelectorAll('.card'));
+  const sample = cardsList[0];
+  const gridStyle = getComputedStyle(grid);
+  const gap = parseInt(gridStyle.gap || gridStyle.rowGap || '16', 10);
+  dragSession = {
+    fromIdx: fromIdx,
+    cards: cardsList,
+    cols: getGridCols(cardsList),
+    gap: isNaN(gap) ? 16 : gap,
+    sampleW: sample ? sample.offsetWidth : 280,
+    sampleH: sample ? sample.offsetHeight : 200,
+  };
+  lastPreviewInsertAt = -1;
+  ev.dataTransfer.effectAllowed = 'move';
+  ev.dataTransfer.setData('text/plain', String(fromIdx));
+  ev.dataTransfer.setDragImage(card, 20, 20);
+  // 下一帧加 .dragging (避免 dragImage 抓到半透状态)
+  setTimeout(function(){ card.classList.add('dragging'); }, 0);
+};
+
+window.onCardDragEndByEl = function(handleEl, ev){
+  // 清所有 inline transform + 移除 .dragging
+  clearPreviewTransforms();
+  const cards = grid.querySelectorAll('.card');
+  for (let i = 0; i < cards.length; i++) cards[i].classList.remove('dragging');
+  dragSession = null;
+  lastPreviewInsertAt = -1;
+};
+
+/**
+ * 算 insertAt = 被拖卡在"新数组"的最终位置. 用「光标坐标 + 各卡的布局位置 (offsetLeft/Top,
+ * 不受 preview transform 影响)」找最近的卡 + before/after —— 整个 grid (含让位后空出来的
+ * 位置、卡间缝隙) 都能算出落点, 不再要求光标必须压在某张卡上。
+ */
+function computeInsertAt(x, y){
+  const cards = dragSession.cards;
+  const from = dragSession.fromIdx;
+  const gridRect = grid.getBoundingClientRect();
+  let best = -1, bestDist = Infinity, bestBefore = true;
+  for (let i = 0; i < cards.length; i++){
+    if (i === from) continue;            // 跳过被拖卡自己
+    const c = cards[i];
+    const cx = gridRect.left + c.offsetLeft + c.offsetWidth / 2;
+    const cy = gridRect.top + c.offsetTop + c.offsetHeight / 2;
+    const dx = x - cx, dy = y - cy;
+    const d = dx * dx + dy * dy;
+    if (d < bestDist){ bestDist = d; best = i; bestBefore = x < cx; }
+  }
+  if (best < 0) return from;
+  if (bestBefore) return from < best ? best - 1 : best;
+  return from < best ? best : best + 1;
+}
+
+// ─── 放置目标 = 整个 grid (而非单张卡) ───────────────────────────
+// 关键修复: dragover 在 grid 上 preventDefault, 让"让位后空出来的位置/缝隙"也允许放置
+// (HTML5 DnD 默认只有 preventDefault 的元素能接收 drop; 之前只挂在卡上 → 空位 no-drop,
+// 落到空位被禁止, 反直觉). 落点全程由光标坐标算, 空位也能精准命中。
+grid.addEventListener('dragover', function(ev){
+  if (!dragSession) return;
+  ev.preventDefault();
+  ev.dataTransfer.dropEffect = 'move';
+  const x = ev.clientX, y = ev.clientY;
+  if (dragOverFrame) return;             // rAF 节流
+  dragOverFrame = requestAnimationFrame(function(){
+    dragOverFrame = 0;
+    if (!dragSession) return;
+    previewReorder(computeInsertAt(x, y));
+  });
+});
+
+grid.addEventListener('dragleave', function(ev){
+  // 真正离开 grid (不是在内部卡之间移动) 才清预演
+  if (grid.contains(ev.relatedTarget)) return;
+  clearPreviewTransforms();
+  lastPreviewInsertAt = -1;
+});
+
+grid.addEventListener('drop', function(ev){
+  ev.preventDefault();
+  if (!dragSession) return;
+  const from = dragSession.fromIdx;
+  const insertAt = computeInsertAt(ev.clientX, ev.clientY);
+  if (from === insertAt){ clearPreviewTransforms(); return; }
+  // 强制对齐 preview 到最终 insertAt (rAF 节流可能漏掉最后一次 dragover), 不清 transform
+  // → buildGrid 重建后新 DOM 已在真实新位置, 视觉无跳变。
+  previewReorder(insertAt);
+  reorderSlides(from, insertAt);
+});
+
+/**
+ * 把 SLIDES / __SPEECHES__ / __SPEAKER_TITLES__ 三数组按 from→to 重排,
+ * 同时把 selected Set 的 idx 重映射, 最后用 FLIP 动画重建 grid.
+ *
+ * FLIP (First, Last, Invert, Play):
+ *   1. 拖前记每张卡的 rect (按 slide.file 作 identity, 因为 idx 会变)
+ *   2. 数据重排 + buildGrid 重建 DOM
+ *   3. 对每张新卡反向 translate 到旧位置, 然后 transition 到 0 → 滑动到新位置
+ *
+ * 视觉上从"瞬间闪现重排"变成"卡片平滑滑动到新位置", 接近手机桌面 app 长按移动的感觉.
+ *
+ * selected 重映射逻辑:
+ *   - 被拖元素自己: from → to
+ *   - from 与 to 之间的元素: 整体向 from 方向挤一位
+ *   - 区间外的元素: 不动
+ */
+function reorderSlides(from, to){
+  if (from === to) return;
+  // ─── FLIP step 1: First — 记录拖前 rects (按 slide.file 作 identity) ──
+  const beforeRects = {};
+  const cardsBefore = grid.querySelectorAll('.card');
+  for (let i = 0; i < cardsBefore.length; i++){
+    if (i < SLIDES.length) {
+      beforeRects[SLIDES[i].file] = cardsBefore[i].getBoundingClientRect();
+    }
+  }
+
+  // ─── 数据重排 (in-place splice) ───────────────────────────
+  const slide = SLIDES.splice(from, 1)[0];
+  SLIDES.splice(to, 0, slide);
+  const speeches = window.__SPEECHES__;
+  if (speeches && speeches.length) {
+    const sp = speeches.splice(from, 1)[0];
+    speeches.splice(to, 0, sp);
+  }
+  const titles = window.__SPEAKER_TITLES__;
+  if (titles && titles.length) {
+    const t = titles.splice(from, 1)[0];
+    titles.splice(to, 0, t);
+  }
+  // selected Set 重映射
+  const newSelected = new Set();
+  selected.forEach(function(oldIdx){
+    let newIdx;
+    if (oldIdx === from) newIdx = to;
+    else if (from < to && oldIdx > from && oldIdx <= to) newIdx = oldIdx - 1;
+    else if (from > to && oldIdx >= to && oldIdx < from) newIdx = oldIdx + 1;
+    else newIdx = oldIdx;
+    newSelected.add(newIdx);
+  });
+  selected = newSelected;
+
+  // ─── 重建 grid (索引 + onclick 参数都变了, 重挂) ───────────
+  buildGrid();
+  refreshCardClasses();
+
+  // ─── FLIP step 2-4: Last, Invert, Play ───────────────────
+  const cardsAfter = grid.querySelectorAll('.card');
+  for (let i = 0; i < cardsAfter.length; i++){
+    if (i >= SLIDES.length) continue;
+    const file = SLIDES[i].file;
+    const before = beforeRects[file];
+    if (!before) continue;
+    const card = cardsAfter[i];
+    const after = card.getBoundingClientRect();
+    const dx = before.left - after.left;
+    const dy = before.top - after.top;
+    if (dx === 0 && dy === 0) continue;
+    // Invert: 立刻 translate 到旧位置 (视觉上还在原处)
+    card.style.transition = 'none';
+    card.style.transform = 'translate(' + dx + 'px, ' + dy + 'px)';
+    // force reflow 确保 transform 生效
+    void card.offsetWidth;
+    // Play: 加 transition + 清 transform → 滑动到 0
+    card.style.transition = 'transform 0.32s cubic-bezier(0.2, 0.8, 0.2, 1)';
+    card.style.transform = '';
+    // 动画结束清 inline style 避免和 hover 的 transform 冲突
+    setTimeout((function(c){ return function(){
+      c.style.transition = '';
+      c.style.transform = '';
+    };})(card), 360);
+  }
+}
+
+function fitViewport(){
+  const vw = document.documentElement.clientWidth;
+  const vh = document.documentElement.clientHeight;
+  const scale = Math.min(vw / BASE_W, vh / BASE_H);
+  viewport.style.transform = 'translate(-50%,-50%) scale(' + scale + ')';
+}
+
+let __switchToken = 0;
+function show(idx){
+  if (filteredSlides.length === 0) return;
+  current = ((idx % filteredSlides.length) + filteredSlides.length) % filteredSlides.length;
+  const token = ++__switchToken;
+  stage.classList.add('is-switching');
+  setFrameMediaActive(stage, false);
+  setTimeout(function(){
+    if(token !== __switchToken) return;
+    stage.src = filteredSlides[current].file;
+  }, 150);
+  counter.textContent = (current + 1) + ' / ' + filteredSlides.length;
+  // 同步给 popup speaker (如果开了) — 传 origIdx (跟 SPEECHES[] 对齐)
+  __notifySpeakerSync(filteredSlides[current].origIdx);
+}
+
+window.next = function(){ show(current + 1); };
+window.prev = function(){ show(current - 1); };
+
+window.startPlay = function(){
+  if (selected.size === 0) return;
+  const list = [];
+  for (let i = 0; i < SLIDES.length; i++){
+    if (selected.has(i)) list.push(Object.assign({}, SLIDES[i], { origIdx: i }));
+  }
+  filteredSlides = list;
+  current = 0;
+  // Thumbnail slides are real documents; unload them before presentation mode.
+  silencePickerFrames(true);
+  picker.classList.add('hidden');
+  player.classList.remove('hidden');
+  fitViewport();
+  show(0);
+  wakeControls(); // 进入播放器先显示控件, 2.5s 后自动隐
+  // 演讲者模式: picker 阶段选定后, startPlay 自动弹 popup speaker 窗
+  if (playMode === 'speaker' && typeof window.openSpeakerWindow === 'function'){
+    window.openSpeakerWindow();
+  }
+};
+
+window.backToPicker = function(){
+  player.classList.add('hidden');
+  picker.classList.remove('hidden');
+  // 释放当前 slide，避免动画继续在后台跑
+  setFrameMediaActive(stage, false);
+  stage.src = 'about:blank';
+  buildGrid();
+  refreshCardClasses();
+  // 关闭演讲者副窗 (退出回 picker 时一并 reset)
+  if (typeof window.closeSpeakerWindow === 'function') window.closeSpeakerWindow();
+};
+
+// 统一键盘分发: 父窗口直按 + slide iframe 内通过 postMessage 中继都走这里
+// 播放期间无任何切换按钮 / 快捷键, 只剩翻页 + 返回
+function handleNavKey(key){
+  const inPlayer = !player.classList.contains('hidden');
+  if (inPlayer){
+    if (key === 'ArrowRight' || key === 'ArrowDown' || key === ' ' || key === 'PageDown') window.next();
+    else if (key === 'ArrowLeft' || key === 'ArrowUp' || key === 'PageUp') window.prev();
+    else if (key === 'Home') show(0);
+    else if (key === 'End') show(filteredSlides.length - 1);
+    else if (key === 'Escape') window.backToPicker();
+  } else {
+    if (key === 'Enter' && selected.size > 0) window.startPlay();
+  }
+}
+
+document.addEventListener('keydown', function(e){
+  // 父窗口聚焦时
+  const NAV = ['ArrowRight','ArrowLeft','ArrowUp','ArrowDown','Home','End',' ','PageUp','PageDown','Escape','Enter'];
+  if (NAV.indexOf(e.key) === -1) return;
+  e.preventDefault();
+  handleNavKey(e.key);
+});
+
+// slide iframe 内的活动经 hardener 中继 — 接收键盘 / 唤醒 / 离开
+window.addEventListener('message', function(e){
+  var d = e && e.data;
+  if (!d || d.source !== 'slide-nav') return;
+  if (d.type === 'key' && typeof d.key === 'string') handleNavKey(d.key);
+  else if (d.type === 'wake') wakeControls();
+  else if (d.type === 'sleep') { /* 不主动 hide, 让定时器自然过期 */ }
+});
+
+// 浮动控件: 仅鼠标 / 触摸活动唤醒 (键盘翻页不唤醒 — 演讲场景下键盘翻页时
+// 不该让翻页 UI 在屏幕上一闪一闪打断观众注意力). 2.5s 无活动自动隐藏.
+// slide iframe 内的 'wake' 中继 ('mousemove' 节流后) 也走这里 — 见上方 message handler.
+let __hideTimer = null;
+function wakeControls(){
+  if (player.classList.contains('hidden')) return;
+  player.classList.add('show-controls');
+  if (__hideTimer) clearTimeout(__hideTimer);
+  __hideTimer = setTimeout(function(){ player.classList.remove('show-controls'); }, 3200);
+}
+['pointermove','mousemove','mousedown','touchstart'].forEach(function(ev){
+  document.addEventListener(ev, wakeControls, { passive: true });
+});
+
+// iframe 会吞掉父页面的鼠标事件；同源时直接监听当前 slide 文档，确保全屏和投屏
+// 模式下移动鼠标仍能唤醒底部控制栏。若浏览器限制 file:// 跨文档访问，底部热区兜底。
+function bindStageControlRelay(){
+  try {
+    const doc = stage.contentDocument;
+    if (!doc || doc.__meetdeckControlsBound) return;
+    doc.__meetdeckControlsBound = true;
+    ['pointermove','mousemove','mousedown','touchstart'].forEach(function(ev){
+      doc.addEventListener(ev, wakeControls, { passive: true });
+    });
+  } catch(e){}
+}
+
+if (controlWakeZone) {
+  ['pointerenter','pointermove','mousedown','touchstart'].forEach(function(ev){
+    controlWakeZone.addEventListener(ev, wakeControls, { passive: true });
+  });
+}
+if (navBar) {
+  navBar.addEventListener('mouseenter', function(){
+    if (__hideTimer) clearTimeout(__hideTimer);
+    player.classList.add('show-controls');
+  });
+  navBar.addEventListener('mouseleave', wakeControls);
+  navBar.addEventListener('focusin', function(){
+    if (__hideTimer) clearTimeout(__hideTimer);
+    player.classList.add('show-controls');
+  });
+  navBar.addEventListener('focusout', wakeControls);
+}
+['fullscreenchange','webkitfullscreenchange'].forEach(function(ev){
+  document.addEventListener(ev, wakeControls);
+});
+window.addEventListener('focus', wakeControls);
+
+window.addEventListener('resize', fitViewport);
+stage.addEventListener('load', function(){
+  setFrameMediaActive(stage, !player.classList.contains('hidden') && stage.src !== 'about:blank');
+  bindStageControlRelay();
+  requestAnimationFrame(function(){ stage.classList.remove('is-switching'); });
+});
+buildGrid();
+</script>
+</body>
+</html>

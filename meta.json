@@ -1,0 +1,1128 @@
+{
+  "title": "DS100",
+  "width": 1920,
+  "height": 1080,
+  "style": "aurora",
+  "slides": [
+    {
+      "file": "slides/slide-launch.html",
+      "title": "DS100 Launch",
+      "type": "title"
+    },
+    {
+      "file": "slides/slide-00.html",
+      "title": "Agenda",
+      "type": "agenda"
+    },
+    {
+      "file": "slides/slide-01.html",
+      "title": "One bad day can end the business.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-02.html",
+      "title": "An AI dashcam is the smartest dollar.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-03.html",
+      "title": "Too much to carry, or too little to trust.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-04.html",
+      "title": "The Hidden Cost",
+      "type": "grid"
+    },
+    {
+      "file": "slides/slide-05.html",
+      "title": "Three Questions Before the Baseline",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-06.html",
+      "title": "Meet DS100",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-07.html",
+      "title": "DS100 — Product Film",
+      "type": "video"
+    },
+    {
+      "file": "slides/slide-08.html",
+      "title": "Fleet Safety Accessible to All",
+      "type": "highlight"
+    },
+    {
+      "file": "slides/slide-09.html",
+      "title": "Designed for dependable daily operation.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-10.html",
+      "title": "See the whole cabin. In any light.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-11.html",
+      "title": "What's ahead. Wide enough to miss nothing.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-12.html",
+      "title": "GPS Dead Zone?",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-13.html",
+      "title": "EzInstaller",
+      "type": "video"
+    },
+    {
+      "file": "slides/slide-14.html",
+      "title": "Every Face Pixelated. Every Frame Compliant.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-15.html",
+      "title": "A Compliance Recorder That Protects the Driver, Too.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-16.html",
+      "title": "DS100 + FT Cloud",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-17.html",
+      "title": "What if you want more?",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-18.html",
+      "title": "What's ahead. Sharp enough to spot it early.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-19.html",
+      "title": "We Fit Every Safety AI This Chip Could Carry.",
+      "type": "content"
+    },
+    {
+      "file": "slides/slide-20.html",
+      "title": "Coverage → Precision",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-21.html",
+      "title": "Two lenses. One for your road.",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-22.html",
+      "title": "Choose the Outcome Your Fleet Needs First",
+      "type": "comparison"
+    },
+    {
+      "file": "slides/slide-23.html",
+      "title": "Fleet Safety Accessible to All",
+      "type": "closing"
+    },
+    {
+      "file": "slides/slide-24.html",
+      "title": "From Safety Visibility to Business Confidence",
+      "type": "closing"
+    },
+    {
+      "file": "slides/slide-25.html",
+      "title": "One More Thing",
+      "type": "transition"
+    },
+    {
+      "file": "slides/slide-26.html",
+      "title": "Thank You & Q&A",
+      "type": "closing"
+    }
+  ],
+  "assets": [
+    {
+      "id": "video-a0978b2919",
+      "kind": "video",
+      "name": "Hero-Cover-65.mp4",
+      "filename": "Videos__Hero-Cover-65.mp4",
+      "mime": "video/mp4",
+      "size": 1929088,
+      "durationSec": 4.042,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "Hero-Cover-65.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-c9b2b2fef7",
+      "kind": "image",
+      "name": "streamax.png",
+      "filename": "Branding__streamax.png",
+      "mime": "image/png",
+      "size": 371547
+    },
+    {
+      "id": "video-4ec74b7714",
+      "kind": "video",
+      "name": "DS100PromotionalVideo.mp4",
+      "filename": "Videos__DS100PromotionalVideo.mp4",
+      "mime": "video/mp4",
+      "size": 138827342,
+      "durationSec": 59.24,
+      "naturalWidth": 2560,
+      "naturalHeight": 1440,
+      "description": "DS100PromotionalVideo.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-1afb85416e",
+      "kind": "image",
+      "name": "pain-liability.jpg",
+      "filename": "Images__pain-liability.jpg",
+      "mime": "image/jpeg",
+      "size": 15287521
+    },
+    {
+      "id": "image-a6e7c6de60",
+      "kind": "image",
+      "name": "pain-premium.jpg",
+      "filename": "Images__pain-premium.jpg",
+      "mime": "image/jpeg",
+      "size": 3355341
+    },
+    {
+      "id": "image-8aea485a07",
+      "kind": "image",
+      "name": "pain-claim.jpg",
+      "filename": "Images__pain-claim.jpg",
+      "mime": "image/jpeg",
+      "size": 185042
+    },
+    {
+      "id": "image-2472cf7a37",
+      "kind": "image",
+      "name": "bg-proof.jpg",
+      "filename": "Images__bg-proof.jpg",
+      "mime": "image/jpeg",
+      "size": 5227153
+    },
+    {
+      "id": "image-fca7333fcf",
+      "kind": "image",
+      "name": "bg-prevent.jpg",
+      "filename": "Images__bg-prevent.jpg",
+      "mime": "image/jpeg",
+      "size": 15678122
+    },
+    {
+      "id": "image-094b78e81c",
+      "kind": "image",
+      "name": "option-enterprise.jpg",
+      "filename": "Images__option-enterprise.jpg",
+      "mime": "image/jpeg",
+      "size": 118980
+    },
+    {
+      "id": "image-49e2f5d003",
+      "kind": "image",
+      "name": "option-budget.jpg",
+      "filename": "Images__option-budget.jpg",
+      "mime": "image/jpeg",
+      "size": 280721
+    },
+    {
+      "id": "image-ae12f95b76",
+      "kind": "image",
+      "name": "buyer-a.jpg",
+      "filename": "Images__buyer-a.jpg",
+      "mime": "image/jpeg",
+      "size": 2860628
+    },
+    {
+      "id": "image-d908378d47",
+      "kind": "image",
+      "name": "buyer-b.jpg",
+      "filename": "Images__buyer-b.jpg",
+      "mime": "image/jpeg",
+      "size": 4828887
+    },
+    {
+      "id": "video-9535f33aaf",
+      "kind": "video",
+      "name": "quality_collapse_bg.mp4",
+      "filename": "Videos__quality_collapse_bg.mp4",
+      "mime": "video/mp4",
+      "size": 32427307,
+      "durationSec": 6.033,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "quality_collapse_bg.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-quality-collapse-still",
+      "kind": "image",
+      "name": "quality_collapse_still.png",
+      "filename": "Images__quality_collapse_still.png",
+      "mime": "image/png",
+      "size": 1036601,
+      "naturalWidth": 1280,
+      "naturalHeight": 720,
+      "description": "Exact 3.00-second tunnel-exit frame extracted from quality_collapse_bg.mp4 for slide 4."
+    },
+    {
+      "id": "image-36a192f5f2",
+      "kind": "image",
+      "name": "ai_blind_bg.jpg",
+      "filename": "Images__ai_blind_bg.jpg",
+      "mime": "image/jpeg",
+      "size": 6514007
+    },
+    {
+      "id": "image-75671bdf3a",
+      "kind": "image",
+      "name": "power_cut_bg.jpg",
+      "filename": "Images__power_cut_bg.jpg",
+      "mime": "image/jpeg",
+      "size": 1429981
+    },
+    {
+      "id": "image-269b691edc",
+      "kind": "image",
+      "name": "dead_end_bg.jpg",
+      "filename": "Images__dead_end_bg.jpg",
+      "mime": "image/jpeg",
+      "size": 6206991
+    },
+    {
+      "id": "image-0102e8186d",
+      "kind": "image",
+      "name": "AD Plus 2.0.png",
+      "filename": "Dashcam Images__AD Plus 2.0.png",
+      "mime": "image/png",
+      "size": 1699488
+    },
+    {
+      "id": "image-aaa2489639",
+      "kind": "image",
+      "name": "C6 Lite 2.0.png",
+      "filename": "Dashcam Images__C6 Lite 2.0.png",
+      "mime": "image/png",
+      "size": 3126789
+    },
+    {
+      "id": "image-cec63c2cfe",
+      "kind": "image",
+      "name": "DS100.png",
+      "filename": "Dashcam Images__DS100.png",
+      "mime": "image/png",
+      "size": 670342
+    },
+    {
+      "id": "image-f9eafe701b",
+      "kind": "image",
+      "name": "C43.png",
+      "filename": "Dashcam Images__C43.png",
+      "mime": "image/png",
+      "size": 362240
+    },
+    {
+      "id": "video-0acd11ab99",
+      "kind": "video",
+      "name": "DS100Front.mp4",
+      "filename": "Videos__DS100Front.mp4",
+      "mime": "video/mp4",
+      "size": 6729262,
+      "durationSec": 2.767,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "DS100Front.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-2f22808a09",
+      "kind": "image",
+      "name": "cover-2mp.png",
+      "filename": "Images__cover-2mp.png",
+      "mime": "image/png",
+      "size": 3647317
+    },
+    {
+      "id": "image-5601b55451",
+      "kind": "image",
+      "name": "cover-hardware.png",
+      "filename": "Images__cover-hardware.png",
+      "mime": "image/png",
+      "size": 4503334
+    },
+    {
+      "id": "image-c1453c0c21",
+      "kind": "image",
+      "name": "cover-deploy.png",
+      "filename": "Images__cover-deploy.png",
+      "mime": "image/png",
+      "size": 3202862
+    },
+    {
+      "id": "video-58c44850d0",
+      "kind": "video",
+      "name": "DS100-ADAS2.mp4",
+      "filename": "Videos__DS100-ADAS2.mp4",
+      "mime": "video/mp4",
+      "size": 8301460,
+      "durationSec": 2.767,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "DS100-ADAS2.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-59e9ea9249",
+      "kind": "video",
+      "name": "Road-Face DS100.mp4",
+      "filename": "Videos__Road-Face DS100.mp4",
+      "mime": "video/mp4",
+      "size": 10752891,
+      "durationSec": 3.333,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "Road-Face DS100.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-f5e37ce390",
+      "kind": "video",
+      "name": "AILicense.mp4",
+      "filename": "Videos__AILicense.mp4",
+      "mime": "video/mp4",
+      "size": 7784204,
+      "durationSec": 4,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "AILicense.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-fe9e415ec5",
+      "kind": "video",
+      "name": "Wide Angle.mp4",
+      "filename": "Videos__Wide Angle.mp4",
+      "mime": "video/mp4",
+      "size": 15125942,
+      "durationSec": 2.2,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "Wide Angle.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-9352931512",
+      "kind": "video",
+      "name": "AutoIR.mp4",
+      "filename": "Videos__AutoIR.mp4",
+      "mime": "video/mp4",
+      "size": 27059654,
+      "durationSec": 3.867,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "AutoIR.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-364b1845b1",
+      "kind": "video",
+      "name": "Mosaic.mp4",
+      "filename": "Videos__Mosaic.mp4",
+      "mime": "video/mp4",
+      "size": 34015356,
+      "durationSec": 6.8,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "Mosaic.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-abf9a63a80",
+      "kind": "video",
+      "name": "DS100RoadFaceCapability.mp4",
+      "filename": "Videos__DS100RoadFaceCapability.mp4",
+      "mime": "video/mp4",
+      "size": 47831741,
+      "durationSec": 6.767,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "DS100RoadFaceCapability.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-a468a8de87",
+      "kind": "video",
+      "name": "ADAS_AI.mp4",
+      "filename": "Videos__ADAS_AI.mp4",
+      "mime": "video/mp4",
+      "size": 20398187,
+      "durationSec": 4.04,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "ADAS_AI.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-a4d27a3fc7",
+      "kind": "image",
+      "name": "Forward Collision Warning (FCW).png",
+      "filename": "ADAS Images__Forward Collision Warning (FCW).png",
+      "mime": "image/png",
+      "size": 557533
+    },
+    {
+      "id": "image-b09d728f2a",
+      "kind": "image",
+      "name": "Headway Monitoring Warning (HMW).png",
+      "filename": "ADAS Images__Headway Monitoring Warning (HMW).png",
+      "mime": "image/png",
+      "size": 559842
+    },
+    {
+      "id": "image-2de6a83004",
+      "kind": "image",
+      "name": "Lane Departure Warning (LDW).png",
+      "filename": "ADAS Images__Lane Departure Warning (LDW).png",
+      "mime": "image/png",
+      "size": 669986
+    },
+    {
+      "id": "image-66ae04e387",
+      "kind": "image",
+      "name": "Pedestrian Collision Warning (PCW).png",
+      "filename": "ADAS Images__Pedestrian Collision Warning (PCW).png",
+      "mime": "image/png",
+      "size": 524078
+    },
+    {
+      "id": "video-aabe6d8efa",
+      "kind": "video",
+      "name": "DSC_AI.mp4",
+      "filename": "Videos__DSC_AI.mp4",
+      "mime": "video/mp4",
+      "size": 30563246,
+      "durationSec": 6.04,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "DSC_AI.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-538349ef91",
+      "kind": "image",
+      "name": "Distraction.png",
+      "filename": "DSC Images__Distraction.png",
+      "mime": "image/png",
+      "size": 1032757
+    },
+    {
+      "id": "image-3167617b3c",
+      "kind": "image",
+      "name": "Phone Use.png",
+      "filename": "DSC Images__Phone Use.png",
+      "mime": "image/png",
+      "size": 946562
+    },
+    {
+      "id": "image-f3cb74be40",
+      "kind": "image",
+      "name": "Smoking.png",
+      "filename": "DSC Images__Smoking.png",
+      "mime": "image/png",
+      "size": 962925
+    },
+    {
+      "id": "image-625b283424",
+      "kind": "image",
+      "name": "Yawning.png",
+      "filename": "DSC Images__Yawning.png",
+      "mime": "image/png",
+      "size": 3163004
+    },
+    {
+      "id": "image-e4ce6e753f",
+      "kind": "image",
+      "name": "Seatbelt.png",
+      "filename": "DSC Images__Seatbelt.png",
+      "mime": "image/png",
+      "size": 902878
+    },
+    {
+      "id": "image-5f7cc44002",
+      "kind": "image",
+      "name": "No Driver.png",
+      "filename": "DSC Images__No Driver.png",
+      "mime": "image/png",
+      "size": 1065045
+    },
+    {
+      "id": "image-2b47efc554",
+      "kind": "image",
+      "name": "Lens Covered.png",
+      "filename": "DSC Images__Lens Covered.png",
+      "mime": "image/png",
+      "size": 2483594
+    },
+    {
+      "id": "video-83567fdc39",
+      "kind": "video",
+      "name": "DS100DeadReckoning.mp4",
+      "filename": "Videos__DS100DeadReckoning.mp4",
+      "mime": "video/mp4",
+      "size": 62093464,
+      "durationSec": 9.333,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "DS100DeadReckoning.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-42ee6ba406",
+      "kind": "video",
+      "name": "CoverageRoad.mp4",
+      "filename": "Videos__CoverageRoad.mp4",
+      "mime": "video/mp4",
+      "size": 42181588,
+      "durationSec": 6.2,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "CoverageRoad.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-b011102da2",
+      "kind": "video",
+      "name": "ADAS_NoAI.mp4",
+      "filename": "Videos__ADAS_NoAI.mp4",
+      "mime": "video/mp4",
+      "size": 24952317,
+      "durationSec": 5,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "ADAS_NoAI.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-c74e73c3a4",
+      "kind": "video",
+      "name": "StorageNetwork.mp4",
+      "filename": "Videos__StorageNetwork.mp4",
+      "mime": "video/mp4",
+      "size": 20193526,
+      "durationSec": 7.267,
+      "naturalWidth": 3840,
+      "naturalHeight": 2160,
+      "description": "StorageNetwork.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-cb9fd716fa",
+      "kind": "video",
+      "name": "LocalInstallMode.mp4",
+      "filename": "Videos__LocalInstallMode.mp4",
+      "mime": "video/mp4",
+      "size": 90160915,
+      "durationSec": 37.667,
+      "naturalWidth": 1440,
+      "naturalHeight": 3032,
+      "description": "LocalInstallMode.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-c6ac074cac",
+      "kind": "video",
+      "name": "FT Cloud Installation Upload.mp4",
+      "filename": "Videos__FT Cloud Installation Upload.mp4",
+      "mime": "video/mp4",
+      "size": 55161295,
+      "durationSec": 29,
+      "naturalWidth": 1440,
+      "naturalHeight": 3086,
+      "description": "FT Cloud Installation Upload.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-aee84a9516",
+      "kind": "video",
+      "name": "DS100PromotionalVideo.mp4",
+      "filename": "DS100_Deliverables__03_Promotional_Video__DS100PromotionalVideo.mp4",
+      "mime": "video/mp4",
+      "size": 138827342,
+      "durationSec": 59.24,
+      "naturalWidth": 2560,
+      "naturalHeight": 1440,
+      "description": "DS100PromotionalVideo.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-69530faea4",
+      "kind": "video",
+      "name": "DS100 Installation Video.mp4",
+      "filename": "DS100_Deliverables__04_Installation_Video__DS100 Installation Video.mp4",
+      "mime": "video/mp4",
+      "size": 119610976,
+      "durationSec": 97.4,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "DS100 Installation Video.mp4",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-e97c5ef775",
+      "kind": "image",
+      "name": "六视图.png",
+      "filename": "DS100_Deliverables__05_3D_Dimensional_Views__六视图.png",
+      "mime": "image/png",
+      "size": 2584221
+    },
+    {
+      "id": "video-ds100-install-ipc",
+      "kind": "video",
+      "name": "DS100-install.mp4",
+      "filename": "DS100-install.mp4",
+      "mime": "video/mp4",
+      "size": 19493703,
+      "description": "User-provided IPC expansion and installation video.",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "image-ds100-ai-final-frame",
+      "kind": "image",
+      "name": "DS100 AI final frame",
+      "filename": "DS100-ai-final-frame.png",
+      "mime": "image/png",
+      "size": 226024,
+      "naturalWidth": 634,
+      "naturalHeight": 356,
+      "description": "Legacy low-resolution final frame retained for rollback."
+    },
+    {
+      "id": "image-ds100-ai-final-frame-hd",
+      "kind": "image",
+      "name": "DS100 AI final frame HD",
+      "filename": "DS100-ai-final-frame-hd.png",
+      "mime": "image/png",
+      "size": 734486,
+      "naturalWidth": 1899,
+      "naturalHeight": 1068,
+      "description": "High-density crop of the final AI capability composition used by slide 16."
+    },
+    {
+      "id": "image-slide-15-final-frame",
+      "kind": "image",
+      "name": "Slide 15 final frame",
+      "filename": "slide-15-final-frame.png",
+      "mime": "image/png",
+      "size": 1098114,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "Player continuity overlay for the slide 15 to slide 16 transition."
+    },
+    {
+      "id": "image-slide-16-entry-frame",
+      "kind": "image",
+      "name": "Slide 16 entry frame",
+      "filename": "slide-16-entry-frame.png",
+      "mime": "image/png",
+      "size": 538655,
+      "naturalWidth": 1920,
+      "naturalHeight": 1080,
+      "description": "Exact slide 16 first frame used by the player to prevent the previous AI video state from flashing during transition."
+    },
+    {
+      "id": "image-dsc-fatigue-driving",
+      "kind": "image",
+      "name": "DSC Fatigue Driving",
+      "filename": "DSC Images__Fatigue Driving.png",
+      "mime": "image/png",
+      "size": 1062412,
+      "naturalWidth": 1254,
+      "naturalHeight": 1254,
+      "description": "Generated DSC-style fatigue-driving concept icon for an in-development scenario."
+    },
+    {
+      "id": "video-install-step-01",
+      "kind": "video",
+      "name": "DS100 installation step 01",
+      "filename": "DS100-install-step-01.webm",
+      "mime": "video/webm",
+      "size": 2165139,
+      "durationSec": 4.8,
+      "naturalWidth": 1280,
+      "naturalHeight": 720,
+      "description": "Generated replaceable first-person DS100 mounting concept clip.",
+      "playbackMode": "loop"
+    },
+    {
+      "id": "video-install-step-02",
+      "kind": "video",
+      "name": "DS100 installation step 02",
+      "filename": "DS100-install-step-02.webm",
+      "mime": "video/webm",
+      "size": 2271214,
+      "durationSec": 4.8,
+      "naturalWidth": 1280,
+      "naturalHeight": 720,
+      "description": "Generated replaceable first-person DS100 cable connection concept clip.",
+      "playbackMode": "loop"
+    },
+    {
+      "id": "image-install-step-01-keyframe",
+      "kind": "image",
+      "name": "DS100 installation step 01 keyframe",
+      "filename": "DS100-install-step-01-keyframe.png",
+      "mime": "image/png",
+      "size": 2054507,
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "description": "Poster frame and source image for the generated mounting clip."
+    },
+    {
+      "id": "image-install-step-02-keyframe",
+      "kind": "image",
+      "name": "DS100 installation step 02 keyframe",
+      "filename": "DS100-install-step-02-keyframe.png",
+      "mime": "image/png",
+      "size": 1915341,
+      "naturalWidth": 1672,
+      "naturalHeight": 941,
+      "description": "Poster frame and source image for the generated cable connection clip."
+    },
+    {
+      "id": "video-coverage-precision-transition-placeholder",
+      "kind": "video",
+      "name": "Coverage to Precision transition placeholder",
+      "filename": "Videos__Coverage-Precision-Transition-Placeholder.mp4",
+      "mime": "video/mp4",
+      "size": 1929088,
+      "description": "Replaceable local placeholder video for slide 17 Coverage to Precision transition.",
+      "playbackMode": "manual"
+    },
+    {
+      "id": "video-ds100-final-version",
+      "kind": "video",
+      "name": "DS100 Final Version.mp4",
+      "filename": "DS100 Final Version.mp4",
+      "mime": "video/mp4",
+      "size": 145132889,
+      "description": "DS100 product film used by the inserted APAC II slide 08.",
+      "playbackMode": "manual"
+    }
+  ],
+  "generatedAt": "2026-08-07T06:57:54.000Z",
+  "project": {
+    "version": 1,
+    "contentDesc": "Slide 1: One bad day can end the business.\nFor a small fleet, one bad day can threaten the entire business. Operating costs and insurance pressure leave almost no room for a weak safety decision.\n\nSlide 2: An AI dashcam is the smartest dollar.\nAn AI dashcam can be the smartest dollar a tight-budget fleet spends: evidence helps resolve the dispute, while AI helps reduce the next risk.\n\nSlide 3: Too much to carry, or too little to trust.\nThe market still forces fleets between expensive enterprise subscriptions and cheap cameras that only record the loss. Neither choice fits the operator counting every dollar.\n\nSlide 4: The Hidden Cost\nThe lowest purchase price can hide the highest operational cost. Evidence quality, dependable AI, protected power and fleet-ready connectivity all have to survive the real road.\n\nSlide 5: Three Questions Before the Baseline\nBefore choosing the device, ask three questions: what is the true total cost, can compliance scale across markets, and can AI act before the next incident?\n\nSlide 6: Meet DS100\nMeet DS100.\n\nSlide 7: DS100 — Product Film\nNow let us see what the new baseline is made of.\n\nSlide 8: Fleet Safety Accessible to All\nDS100 establishes a new baseline with dual 2MP video, industrial-grade hardware and effortless deployment.\n\nSlide 9: Designed for dependable daily operation.\nWhichever version a fleet chooses, the evidence has to survive. DS100 combines protected storage, flexible connectivity and industrial-grade hardware for the moment that matters.\n\nSlide 10: See the whole cabin. In any light.\nCoverage sees the whole cabin in any light, with a 172-degree field of view, automatic infrared and digital WDR.\n\nSlide 11: What's ahead. Wide enough to miss nothing.\nIts wide road-facing view captures more context around the vehicle—especially cut-ins, intersections and incidents near the edge of frame.\n\nSlide 12: GPS Dead Zone?\nA GPS dead zone does not have to become a safety blind spot. Dead Reckoning carries speed and positioning continuity when GNSS drops out.\n\nSlide 13: EzInstaller\nEzInstaller guides the setup on the phone while two first-person installation views show the physical mount and cable connection. From windshield to ready, in minutes.\n\nSlide 14: Every Face Pixelated. Every Frame Compliant.\nDS100 supports a privacy-conscious workflow so shared footage can protect identity without giving up the operational record.\n\nSlide 15: A Compliance Recorder That Protects the Driver, Too.\nCoverage begins as a compliance recorder, but it also brings seven cabin-facing DSC functions into the entry-level safety program.\n\nSlide 16: DS100 + FT Cloud\nDS100 detects and alerts at the edge; FT Cloud brings event video to the fleet team for monitoring, review and coaching. Detect, alert, upload, review and coach—the loop stays connected.\n\n[Sources]\nStreamax DS100 Product Specification\nStreamax DS100 User Manual\n\nSlide 17: What if you want more?\nCoverage establishes the baseline. Now the question is whether a fleet needs more prevention, more precision and more intelligence before impact.\n\nSlide 18: What's ahead. Sharp enough to spot it early.\nThe Precision road-facing lens combines a focused 103-degree field of view, 3.85 millimeter focal length, F1.2 aperture and Digital WDR to pick out critical details farther ahead.\n\nSlide 19: We Fit Every Safety AI This Chip Could Carry.\nPrecision combines road-facing ADAS with seven cabin-facing DSC functions—the focused safety AI an entry fleet needs to start a real program.\n\nSlide 20: Coverage → Precision\nCoverage comes first: a wider field keeps more road context in view. Then Precision concentrates the optical strategy to preserve more detail farther ahead. The video on this transition page is a replaceable placeholder asset.\n\nSlide 21: Two lenses. One for your road.\nWatch the lens strategy switch in real time. Precision narrows and reaches forward; Coverage opens the frame to capture more of what happens around the vehicle.\n\nSlide 22: Choose the Outcome Your Fleet Needs First\nChoose by the risk that matters first. Coverage protects the claim; Precision adds stronger prevention and coaching intelligence.\n\nSlide 23: Fleet Safety Accessible to All\nFleet Safety Accessible to All. DS100 is the new baseline AI dashcam—focused on the protection fleets actually need.\n\nSlide 24: From Safety Visibility to Business Confidence\nDS100 helps fleets turn safety visibility into action. Connected events support faster response, dual-channel video strengthens incident review, and AI events with coaching records make safety management easier to verify.\n\nSlide 25: One More Thing\nOne more thing.\n\nSlide 26: Thank You & Q&A\nThank you. We welcome your questions.",
+    "language": "en",
+    "density": "dense",
+    "aspectKey": "standard",
+    "targetCount": 28,
+    "speaker": "",
+    "globalDesign": {
+      "palette": "Use only Aurora tokens: --bg-deep and --bg-gradient for the canvas; --primary-green and --secondary-blue for emphasis; --text-white and --text-grey for copy; --glass-bg, --glass-border, and --card-bg for surfaces.",
+      "typography": "Use var(--font-main) Inter for headings and body copy, with CJK fallbacks; use var(--font-mono) JetBrains Mono only for technical labels and numeric specifications. Preserve the original size hierarchy.",
+      "motionLanguage": "Preserve each source page interaction and timing; MeetDeck canvas scaling is isolated in fitSlide. Future edits should use Aurora entrance families such as fadeUp, fadeUpCard, maskReveal, blurIn, and scaleIn.",
+      "decorationSystem": "Preserve the existing dark industrial imagery, grid treatments, technical overlays, restrained glass surfaces, and product video framing; use only Aurora color tokens for future redraws.",
+      "rhythm": "Maintain the final 28-slide sequence: launch title and agenda, business stakes, DS100 reveal and product film, Coverage proof, Precision transition and comparison, FT Cloud close-loop, product summary, business value close, One More Thing, and Q&A."
+    },
+    "outlines": [
+      {
+        "id": 1,
+        "type": "content",
+        "title": "One bad day can end the business.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-01.html as the authoritative audience-facing page for sequence position 1.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "For a small fleet, one bad day can threaten the entire business. Operating costs and insurance pressure leave almost no room for a weak safety decision."
+      },
+      {
+        "id": 2,
+        "type": "content",
+        "title": "An AI dashcam is the smartest dollar.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-02.html as the authoritative audience-facing page for sequence position 2.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "An AI dashcam can be the smartest dollar a tight-budget fleet spends: evidence helps resolve the dispute, while AI helps reduce the next risk."
+      },
+      {
+        "id": 3,
+        "type": "content",
+        "title": "Too much to carry, or too little to trust.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-03.html as the authoritative audience-facing page for sequence position 3.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "The market still forces fleets between expensive enterprise subscriptions and cheap cameras that only record the loss. Neither choice fits the operator counting every dollar."
+      },
+      {
+        "id": 4,
+        "type": "grid",
+        "title": "The Hidden Cost",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-04.html as the authoritative audience-facing page for sequence position 4.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "The lowest purchase price can hide the highest operational cost. Evidence quality, dependable AI, protected power and fleet-ready connectivity all have to survive the real road."
+      },
+      {
+        "id": 5,
+        "type": "transition",
+        "title": "Three Questions Before the Baseline",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-05.html as the authoritative audience-facing page for sequence position 5.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Before choosing the device, ask three questions: what is the true total cost, can compliance scale across markets, and can AI act before the next incident?"
+      },
+      {
+        "id": 6,
+        "type": "transition",
+        "title": "Meet DS100",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-06.html as the authoritative audience-facing page for sequence position 6.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Meet DS100."
+      },
+      {
+        "id": 7,
+        "type": "video",
+        "title": "DS100 — Product Film",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-07.html as the authoritative audience-facing page for sequence position 7.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Now let us see what the new baseline is made of."
+      },
+      {
+        "id": 8,
+        "type": "highlight",
+        "title": "Fleet Safety Accessible to All",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-08.html as the authoritative audience-facing page for sequence position 8.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "DS100 establishes a new baseline with dual 2MP video, industrial-grade hardware and effortless deployment."
+      },
+      {
+        "id": 9,
+        "type": "content",
+        "title": "Designed for dependable daily operation.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-09.html as the authoritative audience-facing page for sequence position 9.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Whichever version a fleet chooses, the evidence has to survive. DS100 combines protected storage, flexible connectivity and industrial-grade hardware for the moment that matters."
+      },
+      {
+        "id": 10,
+        "type": "content",
+        "title": "See the whole cabin. In any light.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-10.html as the authoritative audience-facing page for sequence position 10.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Coverage sees the whole cabin in any light, with a 172-degree field of view, automatic infrared and digital WDR."
+      },
+      {
+        "id": 11,
+        "type": "content",
+        "title": "What's ahead. Wide enough to miss nothing.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-11.html as the authoritative audience-facing page for sequence position 11.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Its wide road-facing view captures more context around the vehicle—especially cut-ins, intersections and incidents near the edge of frame."
+      },
+      {
+        "id": 12,
+        "type": "transition",
+        "title": "GPS Dead Zone?",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-12.html as the authoritative audience-facing page for sequence position 12.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "A GPS dead zone does not have to become a safety blind spot. Dead Reckoning carries speed and positioning continuity when GNSS drops out."
+      },
+      {
+        "id": 13,
+        "type": "video",
+        "title": "EzInstaller",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-13.html as the authoritative audience-facing page for sequence position 13.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "EzInstaller guides the setup on the phone while two first-person installation views show the physical mount and cable connection. From windshield to ready, in minutes."
+      },
+      {
+        "id": 14,
+        "type": "content",
+        "title": "Every Face Pixelated. Every Frame Compliant.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-14.html as the authoritative audience-facing page for sequence position 14.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "DS100 supports a privacy-conscious workflow so shared footage can protect identity without giving up the operational record."
+      },
+      {
+        "id": 15,
+        "type": "content",
+        "title": "A Compliance Recorder That Protects the Driver, Too.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-15.html as the authoritative audience-facing page for sequence position 15.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Coverage begins as a compliance recorder, but it also brings seven cabin-facing DSC functions into the entry-level safety program."
+      },
+      {
+        "id": 16,
+        "type": "content",
+        "title": "DS100 + FT Cloud",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-16.html as the authoritative audience-facing page for sequence position 16.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "DS100 detects and alerts at the edge; FT Cloud brings event video to the fleet team for monitoring, review and coaching. Detect, alert, upload, review and coach—the loop stays connected.\n\n[Sources]\nStreamax DS100 Product Specification\nStreamax DS100 User Manual"
+      },
+      {
+        "id": 17,
+        "type": "transition",
+        "title": "What if you want more?",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-17.html as the authoritative audience-facing page for sequence position 17.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Coverage establishes the baseline. Now the question is whether a fleet needs more prevention, more precision and more intelligence before impact."
+      },
+      {
+        "id": 18,
+        "type": "content",
+        "title": "What's ahead. Sharp enough to spot it early.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-18.html as the authoritative audience-facing page for sequence position 18.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "The Precision road-facing lens combines a focused 103-degree field of view, 3.85 millimeter focal length, F1.2 aperture and Digital WDR to pick out critical details farther ahead."
+      },
+      {
+        "id": 19,
+        "type": "content",
+        "title": "We Fit Every Safety AI This Chip Could Carry.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-19.html as the authoritative audience-facing page for sequence position 19.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Precision combines road-facing ADAS with seven cabin-facing DSC functions—the focused safety AI an entry fleet needs to start a real program."
+      },
+      {
+        "id": 20,
+        "type": "transition",
+        "title": "Coverage → Precision",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-20.html as the authoritative audience-facing page for sequence position 20.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Coverage comes first: a wider field keeps more road context in view. Then Precision concentrates the optical strategy to preserve more detail farther ahead. The video on this transition page is a replaceable placeholder asset."
+      },
+      {
+        "id": 21,
+        "type": "transition",
+        "title": "Two lenses. One for your road.",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-21.html as the authoritative audience-facing page for sequence position 21.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Watch the lens strategy switch in real time. Precision narrows and reaches forward; Coverage opens the frame to capture more of what happens around the vehicle."
+      },
+      {
+        "id": 22,
+        "type": "comparison",
+        "title": "Choose the Outcome Your Fleet Needs First",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-22.html as the authoritative audience-facing page for sequence position 22.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Choose by the risk that matters first. Coverage protects the claim; Precision adds stronger prevention and coaching intelligence."
+      },
+      {
+        "id": 23,
+        "type": "closing",
+        "title": "Fleet Safety Accessible to All",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-23.html as the authoritative audience-facing page for sequence position 23.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Fleet Safety Accessible to All. DS100 is the new baseline AI dashcam—focused on the protection fleets actually need."
+      },
+      {
+        "id": 24,
+        "type": "closing",
+        "title": "From Safety Visibility to Business Confidence",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-24.html as the authoritative audience-facing page for sequence position 24.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "DS100 helps fleets turn safety visibility into action. Connected events support faster response, dual-channel video strengthens incident review, and AI events with coaching records make safety management easier to verify. This gives the business greater confidence in how safety risks are managed."
+      },
+      {
+        "id": 25,
+        "type": "transition",
+        "title": "One More Thing",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-25.html as the authoritative audience-facing page for sequence position 25.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "One more thing."
+      },
+      {
+        "id": 26,
+        "type": "closing",
+        "title": "Thank You & Q&A",
+        "bullets": [],
+        "layoutPrompt": "Use the dedicated standalone 1920×1080 HTML page and preserve the DS100 Aurora visual system.",
+        "contentPrompt": "Use slides/slide-26.html as the authoritative audience-facing page for sequence position 26.",
+        "animationPrompt": "Preserve the page internal entrance and media animation; the deck player supplies the page-to-page transition.",
+        "imageSlots": [],
+        "speech": "Thank you. We welcome your questions."
+      }
+    ]
+  }
+}

@@ -1,0 +1,377 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy-Conscious Deployment for Europe</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#050810;
+  --white:#fff;
+  --muted:#a0aec0;
+  --green:#2af598;
+  --blue:#009efd;
+  --line:rgba(255,255,255,.1);
+  --gradient:linear-gradient(115deg,#2af598 0%,#18d9ce 45%,#009efd 100%);
+  --ease:cubic-bezier(.16,1,.3,1)
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:#000;
+  color:var(--white);
+  font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  -webkit-font-smoothing:antialiased
+}
+.slide{
+  position:fixed;
+  inset:50% auto auto 50%;
+  width:1920px;
+  height:1080px;
+  transform:translate(-50%,-50%);
+  overflow:hidden;
+  background:
+    radial-gradient(circle at 8% 22%,rgba(42,245,152,.09),transparent 32%),
+    radial-gradient(circle at 92% 32%,rgba(0,158,253,.1),transparent 36%),
+    var(--bg)
+}
+.slide::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background-image:
+    linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);
+  background-size:64px 64px;
+  mask-image:linear-gradient(to bottom,rgba(0,0,0,.9),transparent 94%);
+  pointer-events:none
+}
+.slide::after{
+  content:"";
+  position:absolute;
+  inset:24px;
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:24px;
+  pointer-events:none
+}
+.orb{
+  position:absolute;
+  border-radius:50%;
+  filter:blur(70px);
+  opacity:.22;
+  pointer-events:none
+}
+.orb.one{
+  width:300px;
+  height:300px;
+  left:-120px;
+  top:360px;
+  background:var(--green);
+  animation:floatOne 9s ease-in-out infinite alternate
+}
+.orb.two{
+  width:360px;
+  height:360px;
+  right:-160px;
+  top:480px;
+  background:var(--blue);
+  animation:floatTwo 10s ease-in-out infinite alternate
+}
+.header{
+  position:absolute;
+  left:120px;
+  right:120px;
+  top:92px;
+  z-index:2
+}
+.eyebrow{
+  display:flex;
+  align-items:center;
+  gap:14px;
+  margin-bottom:24px;
+  color:var(--green);
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.36em;
+  text-transform:uppercase
+}
+.eyebrow::before{
+  content:"";
+  width:42px;
+  height:2px;
+  background:var(--gradient);
+  box-shadow:0 0 16px rgba(42,245,152,.45)
+}
+h1{
+  max-width:none;
+  font-size:72px;
+  line-height:.99;
+  letter-spacing:-.055em;
+  font-weight:900;
+  white-space:nowrap;
+  text-transform:uppercase
+}
+h1 span{
+  background:var(--gradient);
+  -webkit-background-clip:text;
+  background-clip:text;
+  color:transparent
+}
+.subtitle{
+  margin-top:28px;
+  color:var(--muted);
+  font-size:27px;
+  line-height:1.35;
+  font-weight:500;
+  letter-spacing:-.015em
+}
+.eu-mark{
+  position:absolute;
+  top:-54px;
+  right:-94px;
+  width:80px;
+  height:80px;
+  object-fit:contain;
+  opacity:.96;
+  filter:drop-shadow(0 0 20px rgba(0,158,253,.25))
+}
+.modules{
+  position:absolute;
+  left:120px;
+  right:120px;
+  top:420px;
+  height:442px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:28px;
+  z-index:2
+}
+.module{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  padding:34px 36px 32px;
+  border:1px solid var(--line);
+  border-radius:26px;
+  background:linear-gradient(145deg,rgba(255,255,255,.065),rgba(255,255,255,.018) 55%,rgba(0,158,253,.025));
+  box-shadow:0 24px 70px rgba(0,0,0,.32),inset 0 1px 0 rgba(255,255,255,.05);
+  overflow:hidden;
+  opacity:0;
+  transform:translateY(28px);
+  animation:moduleIn .85s var(--ease) forwards
+}
+.module:nth-child(1){animation-delay:.15s}
+.module:nth-child(2){animation-delay:.3s}
+.module:nth-child(3){animation-delay:.45s}
+.module::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:0;
+  height:3px;
+  background:var(--accent,var(--gradient));
+  box-shadow:0 0 18px var(--accent-color)
+}
+.module::after{
+  content:"";
+  position:absolute;
+  width:230px;
+  height:230px;
+  right:-105px;
+  bottom:-130px;
+  border-radius:50%;
+  background:var(--accent-color,var(--green));
+  opacity:.07;
+  filter:blur(25px)
+}
+.module:nth-child(1){
+  --accent:linear-gradient(90deg,#2af598,#20d9c7);
+  --accent-color:#2af598
+}
+.module:nth-child(2){
+  --accent:linear-gradient(90deg,#20d9c7,#00b9e8);
+  --accent-color:#20d9c7
+}
+.module:nth-child(3){
+  --accent:linear-gradient(90deg,#00b9e8,#009efd);
+  --accent-color:#009efd
+}
+.module-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  position:relative;
+  z-index:1
+}
+.number{
+  font-size:18px;
+  font-weight:800;
+  letter-spacing:.16em;
+  color:var(--accent-color)
+}
+.mark{
+  width:44px;
+  height:44px;
+  border:1px solid var(--accent-color);
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  color:var(--accent-color);
+  font-size:20px;
+  font-weight:700;
+  opacity:.8
+}
+.mark::before{
+  content:"";
+  width:12px;
+  height:12px;
+  border:2px solid currentColor;
+  border-radius:50%;
+  box-shadow:0 0 16px currentColor
+}
+.label{
+  position:relative;
+  z-index:1;
+  margin-top:72px;
+  font-size:38px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.08em;
+  color:var(--accent-color)
+}
+.module p{
+  position:relative;
+  z-index:1;
+  margin-top:30px;
+  max-width:470px;
+  color:#c3cfdd;
+  font-size:23px;
+  line-height:1.5;
+  font-weight:500;
+  letter-spacing:-.012em
+}
+.module p::before{
+  content:"";
+  display:block;
+  width:42px;
+  height:2px;
+  margin-bottom:14px;
+  background:var(--accent);
+  box-shadow:0 0 12px var(--accent-color)
+}
+.footer{
+  position:absolute;
+  left:120px;
+  bottom:48px;
+  z-index:2
+}
+.footer img{
+  height:26px;
+  width:auto;
+  opacity:.9;
+  filter:brightness(0) invert(1)
+}
+@keyframes moduleIn{to{opacity:1;transform:none}}
+@keyframes floatOne{to{transform:translate(90px,35px) scale(1.15)}}
+@keyframes floatTwo{to{transform:translate(-80px,-28px) scale(1.12)}}
+@media(prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001s!important;
+    animation-delay:0s!important;
+    animation-iteration-count:1!important
+  }
+}
+@media(max-width:900px){
+  h1{font-size:64px}
+  .modules{left:80px;right:80px;gap:16px}
+  .module{padding:28px 24px}
+  .label{font-size:32px}
+  .module p{font-size:18px}
+  .header{left:80px;right:80px}
+  .footer{left:80px}
+}
+</style>
+</head>
+<body>
+<main class="slide" id="slide-container">
+  <div class="orb one"></div>
+  <div class="orb two"></div>
+
+  <header class="header">
+    <img class="eu-mark" src="../assets/EU.png" alt="European Union">
+    <div class="eyebrow">European deployment</div>
+    <h1>Privacy-Conscious Deployment <span>for Europe</span></h1>
+    <p class="subtitle">Designed to support responsible video operations.</p>
+  </header>
+
+  <section class="modules" aria-label="Privacy-conscious deployment principles">
+    <article class="module">
+      <div class="module-head">
+        <span class="number">01</span>
+        <span class="mark" aria-hidden="true"></span>
+      </div>
+      <div class="label">CONTROL</div>
+      <p>Define access, retention and export rules.</p>
+    </article>
+
+    <article class="module">
+      <div class="module-head">
+        <span class="number">02</span>
+        <span class="mark" aria-hidden="true"></span>
+      </div>
+      <div class="label">PROTECT</div>
+      <p>Use supported face-masking workflows<br>when preparing video for external sharing.</p>
+    </article>
+
+    <article class="module">
+      <div class="module-head">
+        <span class="number">03</span>
+        <span class="mark" aria-hidden="true"></span>
+      </div>
+      <div class="label">GOVERN</div>
+      <p>Align deployment with GDPR, local law,<br>works-council requirements and customer policy.</p>
+    </article>
+  </section>
+
+  <footer class="footer">
+    <img src="../assets/Branding__streamax.png" alt="Streamax">
+  </footer>
+</main>
+<script>
+const slide=document.getElementById('slide-container');
+function fit(){
+  const scale=Math.min(innerWidth/1920,innerHeight/1080);
+  slide.style.transform=`translate(-50%,-50%) scale(${scale})`;
+}
+addEventListener('resize',fit);
+fit();
+function navigate(direction){
+  try{
+    if(parent&&parent!==window&&typeof parent[direction]==='function'){
+      parent[direction]();
+      return true;
+    }
+  }catch(_){}
+  return false;
+}
+addEventListener('keydown',event=>{
+  if(['ArrowRight','ArrowDown',' ','PageDown'].includes(event.key)){
+    event.preventDefault();
+    navigate('next');
+  }else if(['ArrowLeft','ArrowUp','PageUp'].includes(event.key)){
+    event.preventDefault();
+    navigate('prev');
+  }
+});
+addEventListener('click',event=>{
+  event.preventDefault();
+  navigate(event.clientX<innerWidth*.3?'prev':'next');
+});
+</script>
+<script src="shared-compliance-footer.js"></script></body>
+</html>

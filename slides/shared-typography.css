@@ -1,0 +1,175 @@
+/*
+ * DS100 content-page typography contract.
+ * Group A: slides 01–04, 64 / 32.
+ * Group B: slides 08–19, 72 / 36.
+ * Supporting copy is exactly half the headline size in both groups.
+ */
+
+body.ds-group-a {
+  --ds-headline-size: 64px;
+  --ds-description-size: 32px;
+  --ds-copy-gap: 24px;
+}
+
+body.ds-group-b {
+  --ds-headline-size: 72px;
+  --ds-description-size: 36px;
+  --ds-copy-gap: 24px;
+}
+
+body.ds-group-a .h-title,
+body.ds-group-a .title,
+body.ds-group-a .l-trapmid .tm1,
+body.ds-group-b .hero-title,
+body.ds-group-b .head h1,
+body.ds-group-b .hero-line,
+body.ds-group-b .ai-title,
+body.ds-group-b .or-more-title,
+body.ds-group-b .slogan-p1,
+body.ds-group-b .slogan-line1,
+body.ds-group-b .quote,
+body.ds-group-b .headline,
+body.ds-group-b .ft-cloud-callout {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: var(--ds-headline-size) !important;
+  line-height: 1.08 !important;
+  letter-spacing: -0.04em !important;
+}
+
+/* Slides 01–04 follow the Slide 02 reference: one family and one restrained weight scale. */
+body.ds-group-a .h-title,
+body.ds-group-a .title,
+body.ds-group-a .l-trapmid .tm1 {
+  font-weight: 600 !important;
+}
+
+/* Slide 01 uses the same solid-white headline treatment as Slides 02 and 03. */
+body.ds-slide-01 .pain-head .h-title {
+  background: none !important;
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+/* The full two-line Slide 04 headline is white. */
+body.ds-slide-04 .title span {
+  color: #fff !important;
+  -webkit-text-fill-color: #fff !important;
+}
+
+body.ds-group-a .h-title .dim-line {
+  font-size: var(--ds-description-size) !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.012em !important;
+  margin-top: var(--ds-copy-gap) !important;
+  font-weight: 500 !important;
+}
+
+body.ds-group-a .h-sub,
+body.ds-group-a .l-trapmid .tm2,
+body.ds-group-b .hero-slogan,
+body.ds-group-b .hero-sub,
+body.ds-group-b .spec-headline,
+body.ds-group-b .mosaic-subtitle,
+body.ds-group-b .ai-subtitle,
+body.ds-group-b .slogan-line2-main,
+body.ds-group-b .slogan-line2-detail,
+body.ds-group-b .quote-sub,
+body.ds-group-b .tagline,
+body.ds-group-b .head p {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+  font-size: var(--ds-description-size) !important;
+  line-height: 1.45 !important;
+  letter-spacing: -0.012em !important;
+}
+
+body.ds-group-a .h-sub,
+body.ds-group-a .l-trapmid .tm2 {
+  font-weight: 500 !important;
+}
+
+/* Product lockup is intentionally larger than the Group B quote scale. */
+body.ds-group-b .hero-content .hero-title {
+  font-size: 96px !important;
+  line-height: 1 !important;
+}
+
+/* Give gradient headlines enough ink room so descenders and glow are never clipped. */
+body.ds-group-b .hero-line.g {
+  padding-bottom: .10em !important;
+  margin-bottom: -.10em !important;
+  overflow: visible !important;
+}
+
+/* Exact headline-to-description rhythm. */
+body.ds-group-a .h-sub,
+body.ds-group-b .hero-sub,
+body.ds-group-b .head p,
+body.ds-group-b .quote-sub {
+  margin-top: var(--ds-copy-gap) !important;
+}
+
+/* Keep the Slide 10 reliability statement on one centered line. */
+body.ds-slide-10 .hero-sub {
+  max-width: 1600px !important;
+  white-space: nowrap !important;
+}
+
+/* Slide 03 support statement is intentionally lowercase. */
+body.ds-slide-03 .l-trapmid .tm2 {
+  text-transform: none !important;
+}
+
+body.ds-group-a .l-trapmid .tm1 {
+  margin-bottom: var(--ds-copy-gap) !important;
+}
+
+body.ds-group-b .ai-title {
+  margin-bottom: var(--ds-copy-gap) !important;
+}
+
+body.ds-group-b .or-more-title {
+  margin-bottom: var(--ds-copy-gap) !important;
+}
+
+body.ds-group-b .slogan-line1 {
+  margin-bottom: var(--ds-copy-gap) !important;
+}
+
+/* Slide 13's second statement is supporting copy, not another headline. */
+body.ds-group-b .slogan-line2 {
+  line-height: 1.45 !important;
+}
+
+body.ds-group-b .slogan-line2-detail {
+  margin-top: 0 !important;
+}
+
+body.ds-group-b .slogan-line2-main,
+body.ds-group-b .slogan-line2-detail {
+  font-weight: 500 !important;
+}
+
+/* Slides 14–15 use one-line support copy under the centered AI statement. */
+body.ds-slide-14 .ai-subtitle,
+body.ds-slide-15 .ai-subtitle {
+  width: 1500px !important;
+  max-width: 1500px !important;
+  white-space: nowrap !important;
+}
+
+/* Slide 18 keeps its short accent rule while preserving a 24px visual gap. */
+body.ds-group-b .copy .rule {
+  margin: 24px 0 20px !important;
+}
+
+body.ds-group-b .copy .tagline {
+  margin-top: 0 !important;
+}
+
+/* Dense table, metric, card and feature labels intentionally retain local sizes. */
+body.ds-group-b .card-title,
+body.ds-group-b .pcol-title,
+body.ds-group-b .mosaic-main-title,
+body.ds-group-b .cloud-copy strong {
+  font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif !important;
+}

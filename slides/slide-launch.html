@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DS100 Launch</title>
+<style>
+:root{--green:#2af598;--blue:#009efd;--ease:cubic-bezier(.16,1,.3,1)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:100%;height:100%;overflow:hidden;background:#000;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:#fff}
+.slide{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center;overflow:hidden;background:radial-gradient(circle at 50% 49%,rgba(0,158,253,.13),transparent 30%),radial-gradient(circle at 46% 52%,rgba(42,245,152,.07),transparent 43%),#050810}
+.slide:before{content:"";position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:64px 64px;mask-image:radial-gradient(ellipse at 50% 50%,#000 14%,transparent 72%);pointer-events:none}
+.aura{position:absolute;left:50%;top:50%;width:940px;height:330px;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(ellipse,rgba(42,245,152,.12),rgba(0,158,253,.055) 48%,transparent 72%);filter:blur(52px);opacity:0;animation:auraIn 1.2s ease .12s forwards}
+.title{position:absolute;left:50%;top:50%;transform:translate(-50%,-43%);display:flex;align-items:baseline;justify-content:center;gap:30px;white-space:nowrap;font-size:132px;line-height:1;font-weight:900;letter-spacing:-.065em;opacity:0;filter:blur(13px);animation:titleIn 1s var(--ease) .08s forwards}
+.title span:last-child{background:linear-gradient(105deg,var(--green),#20d9c7 48%,var(--blue));-webkit-background-clip:text;background-clip:text;color:transparent}
+.subtitle{position:absolute;left:50%;top:62%;transform:translate(-50%,18px);white-space:nowrap;font-size:40px;line-height:1.35;font-weight:500;letter-spacing:.01em;color:rgba(205,216,230,.76);opacity:0;animation:subtitleIn .85s var(--ease) .42s forwards}
+@keyframes titleIn{to{opacity:1;filter:blur(0);transform:translate(-50%,-50%)}}
+@keyframes subtitleIn{to{opacity:1;transform:translate(-50%,0)}}
+@keyframes auraIn{to{opacity:1}}
+@media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important;animation-delay:0s!important}}
+</style>
+</head>
+<body><main class="slide" id="slide-container"><div class="aura" aria-hidden="true"></div><h1 class="title"><span>DS100</span><span>Launch &nbsp</span></h1><p class="subtitle">Fleet Safety Accessible To All.</p></main>
+<script>function fit(){const e=document.getElementById('slide-container'),s=Math.min(innerWidth/1920,innerHeight/1080);e.style.transform=`translate(-50%,-50%) scale(${s})`}addEventListener('resize',fit);fit();</script>
+<script src="shared-compliance-footer.js"></script></body>
+</html>

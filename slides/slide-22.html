@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Choose the outcome your fleet needs first</title>
+  <style>
+    :root{--g:#2af598;--b:#009efd;--muted:#a5b1c1;--ease:cubic-bezier(.16,1,.3,1)}
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    .slide{position:fixed;left:50%;top:50%;width:1920px;height:1080px;transform:translate(-50%,-50%);transform-origin:center;background:#04070d;overflow:hidden}
+    .head{position:absolute;z-index:5;left:88px;right:88px;top:58px;text-align:center;opacity:0;animation:up .8s var(--ease) .08s forwards}
+    .eyebrow{font-size:14px;letter-spacing:.32em;text-transform:uppercase;color:var(--g);font-weight:800;margin-bottom:17px}
+    .head h1{font-size:68px;letter-spacing:-.045em;line-height:1.04}
+    .head p{font-size:22px;color:#95a3b6;margin-top:13px}
+    .choices{position:absolute;left:82px;right:82px;top:268px;bottom:68px;display:grid;grid-template-columns:1fr 1fr;gap:26px}
+    .choice{position:relative;border:1px solid rgba(255,255,255,.1);border-radius:24px;overflow:hidden;background:#080d16;opacity:0;transform:translateY(28px);animation:up .82s var(--ease) forwards;box-shadow:0 30px 80px rgba(0,0,0,.28)}
+    .choice.precision{animation-delay:.24s}.choice.coverage{animation-delay:.39s}
+    .bg{position:absolute;inset:0;background-position:center;background-size:cover;filter:saturate(.82) contrast(1.08)}
+    .precision .bg{background-image:url('../assets/Images__buyer-b.jpg')}.coverage .bg{background-image:url('../assets/Images__buyer-a.jpg')}
+    .shade{position:absolute;inset:0;background:linear-gradient(0deg,rgba(3,6,12,.99) 0%,rgba(3,6,12,.86) 49%,rgba(3,6,12,.13) 100%)}
+    .choice-copy{position:absolute;z-index:2;left:42px;right:42px;bottom:34px}
+    .tag{font-size:13px;letter-spacing:.2em;text-transform:uppercase;font-weight:850;margin-bottom:12px}
+    .precision .tag{color:var(--g)}.coverage .tag{color:var(--b)}
+    .choice h2{font-size:41px;letter-spacing:-.035em;margin-bottom:10px}
+    .quote{font-size:21px;color:#d3d9e2;line-height:1.38;margin-bottom:21px;max-width:730px}
+    .need{display:flex;gap:12px;align-items:center;font-size:16.5px;color:var(--muted);margin:9px 0}
+    .dot{width:8px;height:8px;border-radius:50%;flex:0 0 auto}.precision .dot{background:var(--g);box-shadow:0 0 12px rgba(42,245,152,.62)}.coverage .dot{background:var(--b);box-shadow:0 0 12px rgba(0,158,253,.62)}
+    .product-label{position:absolute;z-index:3;right:30px;top:28px;font-size:18px;font-weight:760;padding:11px 16px;border-radius:999px;background:rgba(3,6,12,.68);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.12)}
+    .brand{position:absolute;right:32px;bottom:22px;z-index:8;height:23px;opacity:.58}
+    .foundation{position:absolute;z-index:7;left:50%;bottom:18px;transform:translateX(-50%);text-align:center;color:var(--muted);white-space:nowrap;line-height:1.35}
+    .foundation-label{font-size:12px;letter-spacing:.28em;text-transform:uppercase;font-weight:800;color:var(--g);margin-bottom:4px}
+    .foundation-copy{font-size:15px;color:#95a3b6}
+    @keyframes up{to{opacity:1;transform:none}}
+    @media(prefers-reduced-motion:reduce){*{animation-duration:.001s!important}}
+  </style>
+</head>
+<body>
+  <main class="slide" id="slide-container">
+    <header class="head">
+      <div class="eyebrow">Start with the risk you refuse to carry</div>
+      <h1>Choose the outcome your fleet needs first.</h1>
+      <p>Sharper prevention—or wider context. Both begin with your road.</p>
+    </header>
+    <section class="choices">
+      <article class="choice precision">
+        <div class="bg"></div><div class="shade"></div><div class="product-label">DS100 Precision</div>
+        <div class="choice-copy"><div class="tag">My Priority · Prevent Earlier</div><h2>I need earlier warning.</h2><p class="quote">More focused forward detail</p><div class="need"><i class="dot"></i><span>4 ADAS</span></div><div class="need"><i class="dot"></i><span>7 DSC</span></div></div>
+      </article>
+      <article class="choice coverage">
+        <div class="bg"></div><div class="shade"></div><div class="product-label">DS100 Coverage</div>
+        <div class="choice-copy"><div class="tag">My Priority · See More Context</div><h2>I need the whole picture.</h2><p class="quote">Wider road context</p><div class="need"><i class="dot"></i><span>Professional dual-channel evidence</span></div><div class="need"><i class="dot"></i><span>7 DSC</span></div></div>
+      </article>
+    </section>
+    <div class="foundation"><div class="foundation-label">Shared Foundation</div><div class="foundation-copy">Industrial-Grade Hardware · Cabin View · Deployment Workflow · FT Cloud</div></div>
+    <img class="brand" src="../assets/Branding__streamax.png" alt="Streamax">
+  </main>
+  <script>function fit(){const e=document.getElementById('slide-container'),s=Math.min(innerWidth/1920,innerHeight/1080);e.style.transform=`translate(-50%,-50%) scale(${s})`}addEventListener('resize',fit);fit();</script>
+<script src="shared-compliance-footer.js"></script></body>
+</html>
